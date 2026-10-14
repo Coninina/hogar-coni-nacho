@@ -2,15 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Nuestro Hogar - Coni & Nacho</title>
   <style>
     :root {
-      --bg-cream: #fbf7ee;
-      --card-bg: #fffdf9;
-      --border-color: #5c4033;
-      --lavender: #c8b6db;
-      --text-dark: #3a2e2b;
+      --bg-cream: #f4ecdc;
+      --card-bg: #fffdf8;
+      --border-dark: #4a332d;
+      --accent-pink: #f28b82;
+      --accent-purple: #b39ddb;
+      --accent-orange: #ffb74d;
+      --font-pixel: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", monospace;
     }
 
     * {
@@ -18,493 +20,500 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       background-color: var(--bg-cream);
-      font-family: 'Courier New', Courier, monospace;
-      color: var(--text-dark);
+      font-family: var(--font-pixel);
+      color: var(--border-dark);
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
-      padding: 14px;
+      padding: 10px;
     }
 
-    .main-container {
+    .main-wrapper {
       display: flex;
       flex-direction: row;
-      gap: 16px;
-      max-width: 1140px;
+      gap: 14px;
+      max-width: 1000px;
       width: 100%;
-      background: #faf4e8;
-      border: 4px solid var(--border-color);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 6px 6px 0px rgba(92, 64, 51, 0.4);
+      background: #fbf6ec;
+      border: 3.5px solid var(--border-dark);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 4px 5px 0px rgba(74, 51, 45, 0.4);
     }
 
-    @media (max-width: 860px) {
-      .main-container {
+    @media (max-width: 820px) {
+      .main-wrapper {
         flex-direction: column;
+        padding: 8px;
+        gap: 10px;
       }
     }
 
-    .game-section {
-      flex: 1.5;
+    .game-col {
+      flex: 1.6;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
-    .header-bar {
+    .top-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-bg);
-      border: 3px solid var(--border-color);
-      padding: 8px 14px;
-      border-radius: 8px;
+      border: 2.5px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
       font-weight: bold;
-      font-size: 14px;
     }
 
-    .room-selector {
+    .room-tabs {
       display: flex;
       gap: 6px;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
     }
+    .room-tabs::-webkit-scrollbar { display: none; }
 
     .room-btn {
-      background: #eadaaf;
-      border: 2px solid var(--border-color);
+      flex: 0 0 auto;
+      background: #faebd7;
+      border: 2px solid var(--border-dark);
+      border-radius: 8px;
       padding: 6px 10px;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
+      color: var(--border-dark);
       cursor: pointer;
-      border-radius: 6px;
-      box-shadow: 2px 2px 0px var(--border-color);
-      transition: all 0.1s;
-    }
-
-    .room-btn:hover {
-      background: #dfcb9b;
+      box-shadow: 2px 2px 0px var(--border-dark);
+      transition: all 0.1s ease;
     }
 
     .room-btn.active {
       background: #f7a072;
       color: #fff;
       transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0px var(--border-color);
+      box-shadow: 1px 1px 0px var(--border-dark);
     }
 
-    .canvas-container {
+    /* Contenedor responsivo perfecto */
+    .viewport-box {
+      width: 100%;
       position: relative;
-      border: 4px solid var(--border-color);
-      border-radius: 8px;
+      border: 3.5px solid var(--border-dark);
+      border-radius: 12px;
       overflow: hidden;
-      background: #fbf7ee;
-      box-shadow: 4px 4px 0px rgba(92, 64, 51, 0.3);
-      aspect-ratio: 16 / 10;
-      min-height: 320px;
+      background: #fdf5ea;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.06);
     }
 
     canvas {
       width: 100%;
-      height: 100%;
+      height: auto;
       display: block;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
 
-    .banner-notification {
+    .toast-msg {
       position: absolute;
-      top: 10px;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.95);
-      border: 3px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.96);
+      border: 2.5px solid var(--border-dark);
       padding: 6px 14px;
-      font-weight: bold;
-      font-size: 13px;
-      border-radius: 20px;
-      color: #b71c1c;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
-      display: none;
-      z-index: 10;
-      text-align: center;
-    }
-
-    .status-bars-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      background: var(--card-bg);
-      border: 3px solid var(--border-color);
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .bar-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
       font-size: 11px;
       font-weight: bold;
+      border-radius: 20px;
+      color: #b71c1c;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      display: none;
+      z-index: 10;
+      white-space: nowrap;
     }
 
-    .bar-label {
+    /* Barras de amor y felicidad */
+    .status-panel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--card-bg);
+      border: 2.5px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .status-card {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 10.5px;
+      font-weight: bold;
+    }
+
+    .status-header {
       display: flex;
       justify-content: space-between;
     }
 
-    .progress-track {
-      height: 14px;
-      background: #ddd;
-      border: 2px solid var(--border-color);
+    .progress-bar-bg {
+      height: 12px;
+      background: #e2d9cd;
+      border: 2px solid var(--border-dark);
       border-radius: 6px;
       overflow: hidden;
     }
 
-    .progress-fill {
+    .progress-bar-fill {
       height: 100%;
       width: 80%;
-      background: linear-gradient(90deg, #f28b82, #ff6b6b);
+      background: linear-gradient(90deg, #f48fb1, #e57373);
       transition: width 0.3s ease;
     }
+    .progress-bar-fill.purple { background: linear-gradient(90deg, #b39ddb, #9575cd); }
+    .progress-bar-fill.orange { background: linear-gradient(90deg, #ffcc80, #ffa726); }
 
-    .progress-fill.coni {
-      background: linear-gradient(90deg, #b39ddb, #9575cd);
-    }
-
-    .progress-fill.mochi {
-      background: linear-gradient(90deg, #ffb74d, #ffa726);
-    }
-
-    .actions-grid {
+    /* Botones de interacción */
+    .controls-panel {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-    }
-
-    .act-btn {
-      background: #fff;
-      border: 3px solid var(--border-color);
-      padding: 10px;
-      border-radius: 8px;
-      font-family: inherit;
-      font-weight: bold;
-      font-size: 12px;
-      cursor: pointer;
-      box-shadow: 3px 3px 0px var(--border-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    .act-btn:hover { background: #fdf5e6; }
-    .act-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal-content {
-      background: #fffdf9;
-      border: 4px solid var(--border-color);
-      padding: 18px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .food-options {
-      display: flex;
-      flex-direction: column;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
 
-    .food-btn {
+    .control-btn {
       background: #fff;
-      border: 2px solid var(--border-color);
-      padding: 10px;
-      border-radius: 6px;
+      border: 2.5px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 8px 4px;
       font-family: inherit;
+      font-size: 11px;
       font-weight: bold;
-      font-size: 12px;
+      color: var(--border-dark);
       cursor: pointer;
-      text-align: left;
+      box-shadow: 2.5px 2.5px 0px var(--border-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.1s;
     }
 
-    .food-btn:hover { background: #ffe0b2; }
+    .control-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0.5px 0.5px 0px var(--border-dark);
+    }
 
-    .diary-section {
+    /* Sección de Diario y Pensamientos */
+    .diary-col {
       flex: 1;
       display: flex;
       flex-direction: column;
       background: var(--card-bg);
-      border: 3px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      min-width: 290px;
-      max-height: 600px;
+      border: 2.5px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 250px;
+      max-height: 540px;
     }
 
-    .diary-header {
+    .diary-title {
       font-weight: bold;
-      font-size: 14px;
-      padding-bottom: 8px;
-      border-bottom: 2px dashed var(--border-color);
-      margin-bottom: 10px;
+      font-size: 13px;
+      padding-bottom: 6px;
+      border-bottom: 2px dashed #d0c0b0;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
     }
 
-    .diary-logs {
+    .diary-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 2px;
+    }
+
+    .feed-card {
+      background: #faf6f0;
+      border: 1.5px solid #ded0be;
+      border-left: 4.5px solid #8d6e63;
+      border-radius: 6px;
+      padding: 7px 9px;
+      font-size: 11px;
+      line-height: 1.35;
+      animation: appear 0.3s ease;
+    }
+    .feed-card.coni { border-left-color: #9575cd; }
+    .feed-card.nacho { border-left-color: #e57373; }
+    .feed-card.together { border-left-color: #4db6ac; }
+
+    .feed-time {
+      font-size: 9.5px;
+      color: #888;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal Cocina */
+    .modal-wrap {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 14px;
+    }
+
+    .modal-box {
+      background: #fffdf8;
+      border: 3.5px solid var(--border-dark);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 360px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      overflow-y: auto;
-      flex: 1;
+      box-shadow: 4px 5px 0px rgba(0,0,0,0.3);
     }
 
-    .diary-entry {
+    .food-opt {
       background: #fff;
-      border: 2px solid #dfcfb9;
-      border-left: 5px solid #8e6e53;
+      border: 2px solid var(--border-dark);
+      border-radius: 8px;
       padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
-    .diary-entry.coni { border-left-color: #9575cd; }
-    .diary-entry.nacho { border-left-color: #e57373; }
-    .diary-entry.together { border-left-color: #4db6ac; }
-
-    .diary-time {
-      font-size: 10px;
-      color: #888;
-      margin-bottom: 3px;
+      font-family: inherit;
+      font-size: 11.5px;
       font-weight: bold;
+      text-align: left;
+      cursor: pointer;
     }
+    .food-opt:hover { background: #ffe0b2; }
   </style>
 </head>
 <body>
 
-<div class="main-container">
-  <div class="game-section">
-    <div class="header-bar">
+<div class="main-wrapper">
+  <!-- COLUMNA JUEGO -->
+  <div class="game-col">
+    <div class="top-header">
       <div>🏡 Nuestro Hogar</div>
-      <div id="stgo-clock">Santiago: --:--:--</div>
+      <div id="clock-display">Santiago: --:--:--</div>
     </div>
 
-    <div class="room-selector">
-      <button class="room-btn active" id="btn-salon" onclick="switchRoom('salon')">🛋️ Salón</button>
-      <button class="room-btn" id="btn-cocina" onclick="switchRoom('cocina')">🍳 Cocina</button>
-      <button class="room-btn" id="btn-dormitorio" onclick="switchRoom('dormitorio')">🛏️ Dormitorio</button>
-      <button class="room-btn" id="btn-terraza" onclick="switchRoom('terraza')">🌿 Terraza / Jardín</button>
-      <button class="room-btn" id="btn-sala_nacho" onclick="switchRoom('sala_nacho')">🎮 Sala de Nacho</button>
-      <button class="room-btn" id="btn-sala_coni" onclick="switchRoom('sala_coni')">📚 Sala de Coni</button>
+    <!-- SELECTOR DE SALAS -->
+    <div class="room-tabs">
+      <button class="room-btn active" id="btn-salon" onclick="changeRoom('salon')">🛋️ Salón</button>
+      <button class="room-btn" id="btn-cocina" onclick="changeRoom('cocina')">🍳 Cocina</button>
+      <button class="room-btn" id="btn-dormitorio" onclick="changeRoom('dormitorio')">🛏️ Dormitorio</button>
+      <button class="room-btn" id="btn-terraza" onclick="changeRoom('terraza')">🌿 Terraza</button>
+      <button class="room-btn" id="btn-sala_nacho" onclick="changeRoom('sala_nacho')">🎮 Sala Nacho</button>
+      <button class="room-btn" id="btn-sala_coni" onclick="changeRoom('sala_coni')">📚 Sala Coni</button>
     </div>
 
-    <div class="canvas-container">
-      <div id="banner-notification" class="banner-notification"></div>
-      <canvas id="gameCanvas" width="640" height="400"></canvas>
+    <!-- LIENZO PIXEL ART -->
+    <div class="viewport-box">
+      <div id="toast" class="toast-msg"></div>
+      <canvas id="stage" width="560" height="350"></canvas>
     </div>
 
-    <div class="status-bars-container">
-      <div class="bar-box">
-        <div class="bar-label"><span>Nacho 💕</span><span id="pct-nacho">80%</span></div>
-        <div class="progress-track"><div id="bar-nacho" class="progress-fill" style="width: 80%;"></div></div>
+    <!-- BARRAS DE ESTADO -->
+    <div class="status-panel">
+      <div class="status-card">
+        <div class="status-header"><span>Nacho 💕</span><span id="txt-nacho">80%</span></div>
+        <div class="progress-bar-bg"><div id="bar-nacho" class="progress-bar-fill" style="width: 80%;"></div></div>
       </div>
-      <div class="bar-box">
-        <div class="bar-label"><span>Coni 💜</span><span id="pct-coni">80%</span></div>
-        <div class="progress-track"><div id="bar-coni" class="progress-fill coni" style="width: 80%;"></div></div>
+      <div class="status-card">
+        <div class="status-header"><span>Coni 💜</span><span id="txt-coni">80%</span></div>
+        <div class="progress-bar-bg"><div id="bar-coni" class="progress-bar-fill purple" style="width: 80%;"></div></div>
       </div>
-      <div class="bar-box">
-        <div class="bar-label"><span>Mochi 🐾</span><span id="pct-mochi">80%</span></div>
-        <div class="progress-track"><div id="bar-mochi" class="progress-fill mochi" style="width: 80%;"></div></div>
+      <div class="status-card">
+        <div class="status-header"><span>Mochi 🐾</span><span id="txt-mochi">80%</span></div>
+        <div class="progress-bar-bg"><div id="bar-mochi" class="progress-bar-fill orange" style="width: 80%;"></div></div>
       </div>
     </div>
 
-    <div class="actions-grid">
-      <button class="act-btn" onclick="openCookMenu()">
-        <span style="font-size: 20px;">🍲</span>
-        <span>Cocinar Comida</span>
+    <!-- BOTONES -->
+    <div class="controls-panel">
+      <button class="control-btn" onclick="openKitchenModal()">
+        <span style="font-size: 18px;">🍲</span>
+        <span>Cocinar</span>
       </button>
-      <button class="act-btn" onclick="actionHug()">
-        <span style="font-size: 20px;">🫂</span>
-        <span>Abrazo de Amor</span>
+      <button class="control-btn" onclick="hugAction()">
+        <span style="font-size: 18px;">🫂</span>
+        <span>Abrazo</span>
       </button>
-      <button class="act-btn" onclick="actionPetMochi()">
-        <span style="font-size: 20px;">🐱</span>
-        <span>Acariciar Mascota</span>
+      <button class="control-btn" onclick="petAction()">
+        <span style="font-size: 18px;">🐱</span>
+        <span>Acariciar</span>
       </button>
     </div>
   </div>
 
-  <div class="diary-section">
-    <div class="diary-header">
+  <!-- COLUMNA DIARIO -->
+  <div class="diary-col">
+    <div class="diary-title">
       <span>Diario & Sentimientos</span>
-      <span style="font-size: 11px; opacity: 0.8;">En Vivo</span>
+      <span style="font-size: 10px; color:#888;">En Vivo</span>
     </div>
-    <div class="diary-logs" id="diary-logs"></div>
+    <div class="diary-feed" id="diary-feed"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="cookModal" onclick="closeCookMenu(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <h3 style="text-align:center;">🍳 ¿Qué preparará Coni con amor?</h3>
-    <div class="food-options">
-      <button class="food-btn" onclick="cookDish('Pastel de Choclo')">🌽 Pastel de Choclo recién horneado</button>
-      <button class="food-btn" onclick="cookDish('Panqueques')">🥞 Panqueques con manjar</button>
-      <button class="food-btn" onclick="cookDish('Crema de espárragos')">🥣 Crema de espárragos de temporada</button>
-      <button class="food-btn" onclick="cookDish('Asado de Cordero al Palo')">🍖 Asado de Cordero al Palo</button>
-    </div>
-    <button class="room-btn" style="margin-top: 6px;" onclick="closeCookMenu()">Cerrar</button>
+<!-- MODAL COCINAR -->
+<div class="modal-wrap" id="kitchenModal" onclick="closeKitchenModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <h3 style="font-size: 13px; text-align: center;">🍳 ¿Qué preparará Coni con amor?</h3>
+    <button class="food-opt" onclick="cook('Pastel de Choclo')">🌽 Pastel de Choclo recién horneado</button>
+    <button class="food-opt" onclick="cook('Panqueques')">🥞 Panqueques con manjar</button>
+    <button class="food-opt" onclick="cook('Crema de espárragos')">🥣 Crema de espárragos fresca</button>
+    <button class="food-opt" onclick="cook('Asado de Cordero al Palo')">🍖 Asado de Cordero al Palo</button>
+    <button class="room-btn" style="margin-top: 4px;" onclick="closeKitchenModal()">Cerrar</button>
   </div>
 </div>
 
 <script>
-  const canvas = document.getElementById('gameCanvas');
+  const canvas = document.getElementById('stage');
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
 
-  let currentRoom = 'salon';
-  let bannerTimer = null;
-  let particles = [];
+  let activeRoom = 'salon';
+  let toastTimer = null;
+  let heartParticles = [];
 
-  let state = {
-    nachoLove: 80,
-    coniLove: 80,
-    mochiHappy: 80,
-    lastHugTime: Date.now(),
-    lastPetTime: Date.now(),
-    currentDish: null
+  // Datos guardados
+  let gameData = {
+    nacho: 80,
+    coni: 80,
+    mochi: 80,
+    lastHug: Date.now(),
+    lastPet: Date.now(),
+    cooked: null
   };
 
   try {
-    const saved = localStorage.getItem('adorable_home_stgo_save');
-    if (saved) {
-      Object.assign(state, JSON.parse(saved));
-    }
-  } catch (e) {}
+    const s = localStorage.getItem('coni_nacho_save_v2');
+    if (s) Object.assign(gameData, JSON.parse(s));
+  } catch(e) {}
 
-  function saveGame() {
-    try {
-      localStorage.setItem('adorable_home_stgo_save', JSON.stringify(state));
-    } catch (e) {}
+  function save() {
+    try { localStorage.setItem('coni_nacho_save_v2', JSON.stringify(gameData)); } catch(e) {}
   }
 
-  function getSantiagoDate() {
+  function getSantiagoTime() {
     try {
-      const santiagoStr = new Date().toLocaleString("en-US", { timeZone: "America/Santiago" });
-      return new Date(santiagoStr);
-    } catch (e) {
-      return new Date();
-    }
+      const s = new Date().toLocaleString("en-US", { timeZone: "America/Santiago" });
+      return new Date(s);
+    } catch(e) { return new Date(); }
   }
 
-  function updateDecay() {
+  function checkDecay() {
     const now = Date.now();
-    const minSinceHug = (now - state.lastHugTime) / (1000 * 60);
-    if (minSinceHug >= 30) {
-      const steps = Math.floor(minSinceHug / 30);
-      state.nachoLove = Math.max(0, state.nachoLove - steps * 1);
-      state.coniLove = Math.max(0, state.coniLove - steps * 1);
-      state.lastHugTime += steps * 30 * 60 * 1000;
+    // 1% cada 30 min sin abrazo
+    const minHug = (now - gameData.lastHug) / (1000 * 60);
+    if (minHug >= 30) {
+      const st = Math.floor(minHug / 30);
+      gameData.nacho = Math.max(0, gameData.nacho - st * 1);
+      gameData.coni = Math.max(0, gameData.coni - st * 1);
+      gameData.lastHug += st * 30 * 60 * 1000;
     }
-
-    const minSincePet = (now - state.lastPetTime) / (1000 * 60);
-    if (minSincePet >= 120) {
-      const steps = Math.floor(minSincePet / 120);
-      state.mochiHappy = Math.max(0, state.mochiHappy - steps * 10);
-      state.lastPetTime += steps * 120 * 60 * 1000;
+    // 10% cada 2h (120 min) sin acariciar
+    const minPet = (now - gameData.lastPet) / (1000 * 60);
+    if (minPet >= 120) {
+      const st = Math.floor(minPet / 120);
+      gameData.mochi = Math.max(0, gameData.mochi - st * 10);
+      gameData.lastPet += st * 120 * 60 * 1000;
     }
-
-    updateUIBars();
-    saveGame();
+    updateBars();
+    save();
   }
 
-  function updateUIBars() {
-    document.getElementById('bar-nacho').style.width = Math.min(100, Math.max(0, state.nachoLove)) + '%';
-    document.getElementById('pct-nacho').innerText = Math.round(state.nachoLove) + '%';
-    document.getElementById('bar-coni').style.width = Math.min(100, Math.max(0, state.coniLove)) + '%';
-    document.getElementById('pct-coni').innerText = Math.round(state.coniLove) + '%';
-    document.getElementById('bar-mochi').style.width = Math.min(100, Math.max(0, state.mochiHappy)) + '%';
-    document.getElementById('pct-mochi').innerText = Math.round(state.mochiHappy) + '%';
+  function updateBars() {
+    document.getElementById('bar-nacho').style.width = gameData.nacho + '%';
+    document.getElementById('txt-nacho').innerText = Math.round(gameData.nacho) + '%';
+    document.getElementById('bar-coni').style.width = gameData.coni + '%';
+    document.getElementById('txt-coni').innerText = Math.round(gameData.coni) + '%';
+    document.getElementById('bar-mochi').style.width = gameData.mochi + '%';
+    document.getElementById('txt-mochi').innerText = Math.round(gameData.mochi) + '%';
   }
 
-  function showBanner(text) {
-    const el = document.getElementById('banner-notification');
-    el.innerText = text;
-    el.style.display = 'block';
-    if (bannerTimer) clearTimeout(bannerTimer);
-    bannerTimer = setTimeout(() => { el.style.display = 'none'; }, 4500);
+  function notify(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.style.display = 'block';
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4200);
   }
 
-  function actionHug() {
-    state.lastHugTime = Date.now();
-    state.nachoLove = Math.min(100, state.nachoLove + 12.5);
-    state.coniLove = Math.min(100, state.coniLove + 12.5);
-    spawnHearts(canvas.width / 2, canvas.height / 2, 12);
-    addDiaryEntry("together", "Abrazo reconfortante", "Coni y Nacho se dan un tierno y cálido abrazo en casa.");
+  function hugAction() {
+    gameData.lastHug = Date.now();
+    gameData.nacho = Math.min(100, gameData.nacho + 12.5);
+    gameData.coni = Math.min(100, gameData.coni + 12.5);
+    addHearts(canvas.width / 2, canvas.height / 2 - 10, 10);
+    logDiary('together', 'Abrazo reconfortante', 'Coni y Nacho se dan un tierno y cálido abrazo en casa.');
 
-    if (state.nachoLove >= 100 && state.coniLove >= 100) {
-      showBanner("¡Coni y Nacho disfrutan de su amor! 💕");
+    if (gameData.nacho >= 100 && gameData.coni >= 100) {
+      notify("¡Coni y Nacho disfrutan de su amor! 💕");
     }
-    updateUIBars();
-    saveGame();
+    updateBars();
+    save();
   }
 
-  function actionPetMochi() {
-    state.lastPetTime = Date.now();
-    state.mochiHappy = Math.min(100, state.mochiHappy + 20);
-    spawnHearts(260, 280, 8);
-    addDiaryEntry("together", "Mimos para Mochi", "Acariciaste a Mochi suavemente detrás de las orejitas.");
+  function petAction() {
+    gameData.lastPet = Date.now();
+    gameData.mochi = Math.min(100, gameData.mochi + 20);
+    addHearts(240, 260, 8);
+    logDiary('together', 'Mimos para Mochi', 'Acariciaste a Mochi en su lomo. ¡Ronronea feliz!');
 
-    if (state.mochiHappy >= 100) {
-      showBanner("Haces muy feliz a Mochi, él ronronea en tu regazo 🐾");
+    if (gameData.mochi >= 100) {
+      notify("Haces muy feliz a Mochi, él ronronea en tu regazo 🐾");
     }
-    updateUIBars();
-    saveGame();
+    updateBars();
+    save();
   }
 
-  function openCookMenu() { document.getElementById('cookModal').style.display = 'flex'; }
-  function closeCookMenu() { document.getElementById('cookModal').style.display = 'none'; }
+  function openKitchenModal() { document.getElementById('kitchenModal').style.display = 'flex'; }
+  function closeKitchenModal() { document.getElementById('kitchenModal').style.display = 'none'; }
 
-  function cookDish(dishName) {
-    closeCookMenu();
-    state.currentDish = dishName;
-    switchRoom('cocina');
-    spawnHearts(canvas.width / 2, canvas.height / 2 - 20, 10);
+  function cook(dish) {
+    closeKitchenModal();
+    gameData.cooked = dish;
+    changeRoom('cocina');
+    addHearts(canvas.width / 2, canvas.height / 2, 8);
 
-    let comment = "¡Qué delicia casera!";
-    if (dishName === "Pastel de Choclo") comment = "¡Qué delicia típica y doradita al horno!";
-    else if (dishName === "Panqueques") comment = "Preparados con harto manjar para endulzar el día de Nacho.";
-    else if (dishName === "Crema de espárragos") comment = "Calientita y llena de hierro para cuidar el cuerpo.";
-    else if (dishName === "Asado de Cordero al Palo") comment = "¡Un manjar tradicional digno de celebración!";
+    let tip = "";
+    if (dish === 'Pastel de Choclo') tip = "Doradito al horno con mucho cariño.";
+    else if (dish === 'Panqueques') tip = "Con manjar dulce para consentir a Nacho.";
+    else if (dish === 'Crema de espárragos') tip = "Nutritiva y calientita.";
+    else tip = "¡Un manjar tradicional!";
 
-    addDiaryEntry("coni", "Coni cocinó " + dishName, `Coni ha preparado ${dishName}. ${comment}`);
-    addDiaryEntry("nacho", "Nacho disfruta la comida", `Nacho ha comido ${dishName} hecho por Coni después del trabajo, está muy rico, se siente afortunado de tener a Coni en su vida 💕`);
-    showBanner(`🍳 Coni cocinó con amor: ${dishName}`);
-    saveGame();
+    logDiary('coni', 'Coni cocinó ' + dish, `Coni preparó ${dish}. ${tip}`);
+    logDiary('nacho', 'Nacho disfruta la comida', `Nacho ha comido ${dish} hecho por Coni después del trabajo, está muy rico, se siente afortunado de tener a Coni en su vida 💕`);
+    notify(`🍳 Coni cocinó con amor: ${dish}`);
+    save();
   }
 
-  const DIARY_SCHEDULE = {
+  const SCHEDULE_THOUGHTS = {
     morning: {
       coni: [
         "Regaloneando con Mochi en la cama, ¡aún no es tiempo de salir! 🛌",
@@ -514,31 +523,31 @@
       nacho: [
         "Mejor sigo durmiendo zzzzzz...",
         "Oh, tuve un sueño de lo más raro, creo que lo escribiré en mi diario.",
-        "Anoche sí que me dormí tarde, ¡espero tener mejores horarios de sueño de ahora en adelante!"
+        "Anoche sí que me dormí tarde, ¡espero tener mejores horarios de sueño!"
       ],
       together: [
         "Duermen acurrucados en la cama con Mochi.",
-        "Nacho abraza a Coni en la cama y se pega a ella para seguir durmiendo mientras siente su olor.",
-        "Coni le hace cariño en el pelo a Nacho suavemente a ver si se despierta, sin mucho éxito.",
-        "Mochi ronronea plácidamente, definitivamente no sabe qué hora es ni si esta es su primera o séptima siesta del día."
+        "Nacho abraza a Coni en la cama y se pega a ella para seguir durmiendo sintiendo su olor.",
+        "Coni le hace cariño en el pelo a Nacho suavemente a ver si despierta.",
+        "Mochi ronronea plácidamente, no sabe si es su primera o séptima siesta del día."
       ]
     },
     midday: {
       coni: [
-        "Continuaré trabajando en mi novela, ¡tengo mucha inspiración y debería anotar estas ideas cuanto antes!",
-        "Es temporada de espárragos, quizá deba hacer una crema, ¡el hierro es bueno para el cuerpo!",
-        "Creo que saldré a pasear, nada como una buena caminata para inspirarme, ¡también debería traer un cuaderno para anotar mis ideas!",
-        "¿Qué hará el Nacho hoy? Me pregunto si querrá salir conmigo al parque."
+        "Continuaré trabajando en mi novela, ¡tengo mucha inspiración hoy!",
+        "Es temporada de espárragos, quizá deba hacer una crema, ¡el hierro es bueno!",
+        "Creo que saldré a pasear para inspirarme y anotar ideas en mi cuaderno.",
+        "¿Qué hará el Nacho hoy? Me pregunto si querrá salir al parque."
       ],
       nacho: [
-        "Voy a salir un rato con mis amigos a tocar en la plaza, el día está muy bonito.",
-        "¿Qué polera debería ponerme? Definitivamente la polera gris con estos pantalones, sip, ¡no por nada es mi polera favorita!",
-        "Pondré a lavar la ropa ahora, ¿o quizá deba esperar a que se junte más?",
-        "¿A qué jugaré hoy en la noche? Ah, ya sé, hay un juego con el que he estado obsesionado últimamente…"
+        "Voy a salir un rato con mis amigos a tocar en la plaza, el día está bonito.",
+        "Definitivamente la polera gris con estos pantalones, ¡no por nada es mi favorita!",
+        "Pondré a lavar la ropa ahora, ¿o espero a que se junte más?",
+        "¿A qué jugaré hoy en la noche? Hay un juego con el que estoy obsesionado…"
       ],
       together: [
-        "Coni y Nacho disfrutan del día sentados en la terraza, Coni le lee a Nacho en voz alta la continuación del libro mientras Nacho la escucha con ojos cerrados.",
-        "Es momento de estar en casa, Coni lee un libro mientras Nacho practica con su viola una nueva canción en el salón. Es un día relajado."
+        "Coni y Nacho disfrutan sentados en la terraza, Coni le lee mientras Nacho reposa en sus muslos.",
+        "Momento tranquilo en casa: Coni lee un libro y Nacho practica con su viola."
       ]
     },
     lunch: {
@@ -548,33 +557,33 @@
         "Dejé un poco en la olla por si quieres comer más, Nachito."
       ],
       nacho: [
-        "Me encanta almorzar con Coni, por alguna razón siento que todo sabe mejor y más dulce cuando comemos juntos.",
-        "¿Qué sabor es este? Quizá esto tiene demasiada sal... pero sigue rico.",
+        "Me encanta almorzar con Coni, todo sabe más dulce y rico cuando comemos juntos.",
+        "¿Qué sabor es este? Quizá tiene un toque de sal extra, pero delicioso.",
         "¡Ahora sí quedé lleno, estuvo muy rico!"
       ],
       together: [
-        "Nacho y Coni disfrutan del almuerzo juntos compartiendo charlas cotidianas en la cocina."
+        "Nacho y Coni disfrutan del almuerzo compartiendo historias del día."
       ]
     },
     games: {
       coni: [
-        "¡Qué buena jugada! Vamos a ver quién adivina la siguiente pista en Dixit.",
-        "Me encanta cuando vienen amigos a la casa a pasar la tarde."
+        "¡Qué buena jugada! Vamos a ver quién adivina la pista en Dixit.",
+        "Me encanta cuando vienen amigos a la casa a jugar."
       ],
       nacho: [
-        "¡Ojo con esa carta! La estrategia aquí es cooperativa, no nos confiemos.",
-        "¡Es hora de una tarde divertida de juegos de mesa con amigos! ¿Dixit? ¿Monopoly? ¿Tough Calls? ¿Hanabi? ¿Qué juego será el que habrán elegido nuestros queridos invitados hoy?"
+        "¡Es hora de una tarde divertida de juegos de mesa con amigos! ¿Dixit? ¿Monopoly? ¿Tough Calls? ¿Hanabi?",
+        "¡Ojo con esa carta, juguemos cooperativo!"
       ],
       together: [
-        "¡Tarde de juegos de mesa en el salón! Risas, cartas y dados volando entre amigos."
+        "¡Tarde de juegos de mesa en el salón! Risas y fichas en movimiento."
       ]
     },
     evening: {
       coni: [
-        "Hoy voy a empezar un nuevo capítulo, será sobre las vicisitudes de la vida familiar… ¿o sobre la aparición de un nuevo personaje clave en la historia?",
-        "Creo que me falta inspiración, no me gusta lo que escribí, pero lo dejaré a un lado y lo discutiré luego con Gemini.",
-        "Ahhh… eso está mejor, creo que voy progresando más rápido de lo que pensaba.",
-        "Oh, tengo otra idea, debo anotarla para iniciarla una vez que haya terminado con esto."
+        "Hoy voy a empezar un nuevo capítulo sobre las vicisitudes familiares.",
+        "Creo que me falta inspiración, lo dejaré a un lado y lo discutiré luego con Gemini.",
+        "Ahhh… eso está mejor, creo que voy más rápido de lo que pensaba.",
+        "Oh, tengo otra idea, debo anotarla de inmediato."
       ],
       nacho: [
         "AAAAAAAY QUE RABIA POR LA CHUCHAAAAAA ME MATÓ DE NUEVOOOO",
@@ -582,25 +591,17 @@
         "Ooooh me encanta esta parte, hace tiempo que no me pasaba este jefe."
       ],
       together: [
-        "Nacho inmerso en su rincón gamer y Coni concentrada en su novela entre libros y vinilos."
+        "Nacho en su rincón gamer y Coni escribiendo entre libros y buena música."
       ]
     },
     night: {
-      coni: [
-        "Buenas noches mundo... la cama está tan calentita.",
-        "Mochi ya se acurrucó a nuestros pies..."
-      ],
-      nacho: [
-        "Dormir abrazado a Coni es lo mejor de todo el día.",
-        "Zzzzzzz..."
-      ],
-      together: [
-        "Los dos durmiendo plácidamente en el dormitorio con Mochi, luces apagadas en la habitación y sueños tranquilos."
-      ]
+      coni: ["Buenas noches mundo... la camita está tan calentita.", "Mochi ya se acurrucó a nuestros pies..."],
+      nacho: ["Dormir abrazado a Coni es lo mejor de todo el día.", "Zzzzzzz..."],
+      together: ["Los dos durmiendo plácidamente en el dormitorio con Mochi, luces suaves y calma."]
     }
   };
 
-  function getCurrentScheduleKey(hour) {
+  function getScheduleKey(hour) {
     if (hour >= 7 && hour < 11) return 'morning';
     if (hour >= 11 && hour < 14) return 'midday';
     if (hour >= 14 && hour < 15) return 'lunch';
@@ -609,83 +610,68 @@
     return 'night';
   }
 
-  function addDiaryEntry(author, title, text) {
-    const logs = document.getElementById('diary-logs');
-    if (!logs) return;
-    const entry = document.createElement('div');
-    entry.className = `diary-entry ${author}`;
+  function logDiary(author, title, text) {
+    const box = document.getElementById('diary-feed');
+    if (!box) return;
+    const card = document.createElement('div');
+    card.className = `feed-card ${author}`;
 
-    const stgoNow = getSantiagoDate();
-    const timeStr = stgoNow.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    const stgo = getSantiagoTime();
+    const time = stgo.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
 
-    let authorTag = "Coni & Nacho";
-    if (author === 'coni') authorTag = "Coni 💜";
-    if (author === 'nacho') authorTag = "Nacho 💕";
+    let tag = "Coni & Nacho";
+    if (author === 'coni') tag = "Coni 💜";
+    if (author === 'nacho') tag = "Nacho 💕";
 
-    entry.innerHTML = `
-      <div class="diary-time">${timeStr} • ${authorTag} - <i>${title}</i></div>
-      <div>${text}</div>
-    `;
-
-    logs.prepend(entry);
-    while (logs.children.length > 25) {
-      logs.removeChild(logs.lastChild);
-    }
+    card.innerHTML = `<div class="feed-time">${time} • ${tag} — <i>${title}</i></div><div>${text}</div>`;
+    box.prepend(card);
+    while (box.children.length > 25) box.removeChild(box.lastChild);
   }
 
-  function triggerScheduledThought() {
-    const stgo = getSantiagoDate();
-    const hour = stgo.getHours();
-    const key = getCurrentScheduleKey(hour);
-    const bundle = DIARY_SCHEDULE[key];
-
-    const pick = Math.random();
-    if (pick < 0.35) {
-      const msg = bundle.coni[Math.floor(Math.random() * bundle.coni.length)];
-      addDiaryEntry('coni', 'Pensamiento de Coni', msg);
-    } else if (pick < 0.70) {
-      const msg = bundle.nacho[Math.floor(Math.random() * bundle.nacho.length)];
-      addDiaryEntry('nacho', 'Pensamiento de Nacho', msg);
+  setInterval(() => {
+    const stgo = getSantiagoTime();
+    const bundle = SCHEDULE_THOUGHTS[getScheduleKey(stgo.getHours())];
+    const rnd = Math.random();
+    if (rnd < 0.35) {
+      const m = bundle.coni[Math.floor(Math.random() * bundle.coni.length)];
+      logDiary('coni', 'Pensamiento de Coni', m);
+    } else if (rnd < 0.7) {
+      const m = bundle.nacho[Math.floor(Math.random() * bundle.nacho.length)];
+      logDiary('nacho', 'Pensamiento de Nacho', m);
     } else {
-      const msg = bundle.together[Math.floor(Math.random() * bundle.together.length)];
-      addDiaryEntry('together', 'Momento compartido', msg);
+      const m = bundle.together[Math.floor(Math.random() * bundle.together.length)];
+      logDiary('together', 'Momento en casa', m);
     }
-  }
+  }, 30000);
 
-  setInterval(triggerScheduledThought, 32000);
-
-  function switchRoom(room) {
-    currentRoom = room;
+  function changeRoom(r) {
+    activeRoom = r;
     document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById('btn-' + room);
+    const btn = document.getElementById('btn-' + r);
     if (btn) btn.classList.add('active');
   }
 
-  function spawnHearts(x, y, count = 8) {
+  function addHearts(x, y, count = 8) {
     for (let i = 0; i < count; i++) {
-      particles.push({
-        x: x + (Math.random() * 40 - 20),
+      heartParticles.push({
+        x: x + (Math.random() * 30 - 15),
         y: y + (Math.random() * 20 - 10),
-        vx: (Math.random() - 0.5) * 1.5,
-        vy: -Math.random() * 1.5 - 0.8,
+        vx: (Math.random() - 0.5) * 1.4,
+        vy: -Math.random() * 1.5 - 0.6,
         life: 1.0,
-        decay: 0.015 + Math.random() * 0.015,
+        decay: 0.02 + Math.random() * 0.02,
         color: Math.random() > 0.5 ? '#f48fb1' : '#ce93d8'
       });
     }
   }
 
-  function renderParticles() {
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
+  function updateParticles() {
+    for (let i = heartParticles.length - 1; i >= 0; i--) {
+      const p = heartParticles[i];
       p.x += p.vx;
       p.y += p.vy;
       p.life -= p.decay;
-
-      if (p.life <= 0) {
-        particles.splice(i, 1);
-        continue;
-      }
+      if (p.life <= 0) { heartParticles.splice(i, 1); continue; }
 
       ctx.save();
       ctx.globalAlpha = p.life;
@@ -698,607 +684,594 @@
     }
   }
 
-  function drawPixelRect(x, y, w, h, color) {
+  function px(x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
   }
 
   /* ============================================================
-     SPRITES ORIGINALES
+     SPRITES DETALLADOS TIPO ADORABLE HOME
      ============================================================ */
 
-  // CONI: Misma estructura inicial, pelo negro corto hasta los hombros
-  function drawConi(x, y, isReading = false, isSitting = false, sleeping = false) {
+  // CONI: Pelo negro corto hasta los hombros, linda postura
+  function drawConi(x, y, reading = false, sitting = false, sleeping = false) {
     ctx.save();
     if (sleeping) {
-      drawPixelRect(x, y, 42, 14, "#d1c4e9");
-      drawPixelRect(x - 12, y + 2, 14, 12, "#1a1a1a");
-      drawPixelRect(x - 8, y + 4, 10, 8, "#ffd1b3");
+      // Durmiendo plácidamente
+      px(x, y, 42, 14, "#d1c4e9");
+      px(x - 12, y + 2, 14, 12, "#1a1a1a"); // pelo negro
+      px(x - 8, y + 4, 10, 8, "#ffd1b3");
       ctx.fillStyle = "#333";
       ctx.fillRect(x - 5, y + 7, 3, 1);
       ctx.restore();
       return;
     }
 
-    // Cabello negro corto hasta los hombros
-    drawPixelRect(x - 2, y + 4, 28, 22, "#1a1a1a");
-    drawPixelRect(x - 4, y + 10, 32, 18, "#151515");
+    // Pelo negro hasta los hombros (volumen posterior)
+    px(x - 2, y + 2, 26, 26, "#151515");
+    px(x - 5, y + 8, 32, 20, "#1f1f1f");
 
-    if (!isSitting) {
-      drawPixelRect(x + 2, y + 24, 20, 26, "#9575cd");
-      drawPixelRect(x + 3, y + 50, 8, 22, "#4a3b32");
-      drawPixelRect(x + 13, y + 50, 8, 22, "#4a3b32");
-      drawPixelRect(x + 2, y + 72, 9, 5, "#2b2b2b");
-      drawPixelRect(x + 13, y + 72, 9, 5, "#2b2b2b");
+    // Rostro cálido
+    px(x + 2, y + 6, 18, 16, "#ffd1b3");
+
+    // Flequillo y corte de pelo al hombro característico
+    px(x, y, 22, 7, "#151515");
+    px(x + 16, y + 6, 6, 18, "#1a1a1a");
+    px(x, y + 6, 5, 18, "#1a1a1a");
+
+    // Ojos y rubor
+    ctx.fillStyle = "#2d2424";
+    ctx.fillRect(x + 5, y + 13, 3, 3);
+    ctx.fillRect(x + 13, y + 13, 3, 3);
+    ctx.fillStyle = "#ffab91";
+    ctx.fillRect(x + 3, y + 16, 3, 2);
+    ctx.fillRect(x + 15, y + 16, 3, 2);
+
+    // Ropa: Blusa lavanda pastel
+    if (!sitting) {
+      px(x + 1, y + 23, 20, 24, "#9575cd");
+      px(x + 3, y + 47, 7, 22, "#4a3b32");
+      px(x + 11, y + 47, 7, 22, "#4a3b32");
+      px(x + 2, y + 69, 8, 5, "#2b2b2b");
+      px(x + 11, y + 69, 8, 5, "#2b2b2b");
     } else {
-      drawPixelRect(x + 2, y + 24, 20, 22, "#9575cd");
-      drawPixelRect(x + 2, y + 46, 24, 14, "#4a3b32");
-      drawPixelRect(x + 18, y + 56, 8, 8, "#2b2b2b");
+      px(x + 1, y + 23, 20, 20, "#9575cd");
+      px(x + 2, y + 43, 22, 12, "#4a3b32");
+      px(x + 16, y + 52, 7, 6, "#2b2b2b");
     }
 
-    drawPixelRect(x + 2, y + 6, 20, 18, "#ffd1b3");
-    drawPixelRect(x, y + 2, 24, 8, "#1a1a1a");
-    drawPixelRect(x + 18, y + 8, 5, 14, "#1a1a1a");
-    drawPixelRect(x + 1, y + 8, 5, 14, "#1a1a1a");
-
-    ctx.fillStyle = "#2d2424";
-    ctx.fillRect(x + 6, y + 14, 3, 3);
-    ctx.fillRect(x + 15, y + 14, 3, 3);
-    ctx.fillStyle = "#ffab91";
-    ctx.fillRect(x + 4, y + 17, 3, 2);
-    ctx.fillRect(x + 17, y + 17, 3, 2);
-
-    if (isReading) {
-      drawPixelRect(x + 6, y + 34, 18, 14, "#b71c1c");
-      drawPixelRect(x + 8, y + 35, 14, 12, "#fff8e1");
-      drawPixelRect(x + 14, y + 35, 2, 12, "#b71c1c");
+    if (reading) {
+      px(x + 5, y + 31, 16, 13, "#b71c1c");
+      px(x + 7, y + 32, 12, 11, "#fffde7");
+      px(x + 12, y + 32, 2, 11, "#b71c1c");
     }
     ctx.restore();
   }
 
-  // NACHO: Sprite original estético que te encantó
-  function drawNacho(x, y, withViola = false, isSitting = false, sleeping = false, playingGame = false) {
+  // NACHO: Sprite adorable original con contextura y pelo castaño
+  function drawNacho(x, y, withViola = false, sitting = false, sleeping = false, playing = false) {
     ctx.save();
     if (sleeping) {
-      drawPixelRect(x, y, 48, 16, "#78909c");
-      drawPixelRect(x + 40, y + 2, 14, 12, "#4e342e");
-      drawPixelRect(x + 38, y + 4, 10, 8, "#ffccaa");
+      px(x, y, 48, 16, "#78909c");
+      px(x + 38, y + 2, 14, 12, "#4e342e");
+      px(x + 36, y + 4, 10, 8, "#ffccaa");
       ctx.fillStyle = "#333";
-      ctx.fillRect(x + 41, y + 7, 3, 1);
+      ctx.fillRect(x + 39, y + 7, 3, 1);
       ctx.restore();
       return;
     }
 
-    // Cabello original con volumen
-    drawPixelRect(x, y, 24, 12, "#4e342e");
-    drawPixelRect(x - 2, y + 4, 4, 10, "#4e342e");
-    drawPixelRect(x + 2, y + 10, 20, 16, "#ffccaa");
+    // Cabello castaño con volumen original
+    px(x - 1, y - 1, 24, 13, "#4e342e");
+    px(x - 3, y + 3, 4, 10, "#4e342e");
+    px(x + 21, y + 2, 3, 8, "#4e342e");
 
-    // Ojos originales
+    // Cara
+    px(x + 2, y + 9, 18, 16, "#ffccaa");
+
+    // Ojos y expresión
     ctx.fillStyle = "#2d2424";
-    ctx.fillRect(x + 6, y + 15, 3, 3);
-    ctx.fillRect(x + 15, y + 15, 3, 3);
-
-    // Sonrisa
+    ctx.fillRect(x + 5, y + 14, 3, 3);
+    ctx.fillRect(x + 13, y + 14, 3, 3);
     ctx.fillStyle = "#d7a080";
-    ctx.fillRect(x + 9, y + 21, 6, 2);
+    ctx.fillRect(x + 8, y + 20, 5, 2);
 
-    // Polera gris favorita y pantalón
-    if (!isSitting) {
-      drawPixelRect(x + 1, y + 26, 22, 28, "#78909c");
-      drawPixelRect(x + 3, y + 54, 8, 24, "#37474f");
-      drawPixelRect(x + 13, y + 54, 8, 24, "#37474f");
-      drawPixelRect(x + 2, y + 78, 9, 6, "#212121");
-      drawPixelRect(x + 13, y + 78, 9, 6, "#212121");
+    // Polera gris favorita
+    if (!sitting) {
+      px(x + 1, y + 25, 20, 26, "#78909c");
+      px(x + 3, y + 51, 7, 23, "#37474f");
+      px(x + 12, y + 51, 7, 23, "#37474f");
+      px(x + 2, y + 74, 8, 6, "#212121");
+      px(x + 12, y + 74, 8, 6, "#212121");
     } else {
-      drawPixelRect(x + 1, y + 26, 22, 24, "#78909c");
-      drawPixelRect(x + 3, y + 48, 26, 14, "#37474f");
-      drawPixelRect(x + 18, y + 60, 9, 7, "#212121");
+      px(x + 1, y + 25, 20, 22, "#78909c");
+      px(x + 3, y + 45, 24, 13, "#37474f");
+      px(x + 17, y + 56, 8, 7, "#212121");
     }
 
     if (withViola) {
-      drawPixelRect(x + 16, y + 28, 16, 22, "#8d6e63");
-      drawPixelRect(x + 19, y + 24, 10, 6, "#6d4c41");
-      drawPixelRect(x + 22, y + 14, 4, 12, "#3e2723");
-      drawPixelRect(x + 10, y + 36, 28, 3, "#d7ccc8");
+      px(x + 14, y + 26, 15, 20, "#8d6e63");
+      px(x + 17, y + 22, 9, 6, "#6d4c41");
+      px(x + 20, y + 12, 3, 12, "#3e2723");
+      px(x + 8, y + 34, 26, 3, "#d7ccc8");
     }
 
-    if (playingGame) {
-      drawPixelRect(x + 18, y + 38, 12, 6, "#ffccaa");
+    if (playing) {
+      px(x + 16, y + 36, 10, 6, "#ffccaa");
     }
     ctx.restore();
   }
 
-  // MOCHI: Sprite original
+  // MOCHI: Gatito suave
   function drawMochi(x, y, sleeping = false) {
     ctx.save();
     if (sleeping) {
-      drawPixelRect(x, y + 6, 24, 14, "#fffaf0");
-      drawPixelRect(x + 16, y + 8, 8, 10, "#e0b674");
-      drawPixelRect(x + 2, y + 4, 6, 5, "#fffaf0");
-      drawPixelRect(x + 8, y + 10, 3, 1, "#444");
+      px(x, y + 5, 22, 13, "#fffaf0");
+      px(x + 14, y + 7, 7, 9, "#e0b674");
+      px(x + 2, y + 3, 5, 5, "#fffaf0");
+      px(x + 7, y + 9, 3, 1, "#444");
       ctx.restore();
       return;
     }
-    drawPixelRect(x, y + 6, 22, 16, "#fffaf0");
-    drawPixelRect(x + 12, y + 4, 10, 10, "#e0b674");
-    drawPixelRect(x + 14, y, 14, 14, "#fffaf0");
-    drawPixelRect(x + 14, y - 4, 4, 4, "#ffcdd2");
-    drawPixelRect(x + 24, y - 4, 4, 4, "#e0b674");
+    px(x, y + 5, 20, 15, "#fffaf0");
+    px(x + 10, y + 3, 9, 9, "#e0b674");
+    px(x + 12, y, 13, 13, "#fffaf0");
+    px(x + 12, y - 3, 4, 4, "#ffcdd2");
+    px(x + 21, y - 3, 4, 4, "#e0b674");
     ctx.fillStyle = "#2e7d32";
-    ctx.fillRect(x + 18, y + 4, 3, 3);
-    ctx.fillRect(x + 24, y + 4, 3, 3);
+    ctx.fillRect(x + 16, y + 3, 3, 3);
+    ctx.fillRect(x + 21, y + 3, 3, 3);
     ctx.fillStyle = "#f48fb1";
-    ctx.fillRect(x + 22, y + 8, 2, 2);
-    drawPixelRect(x - 4, y + 4, 5, 12, "#e0b674");
+    ctx.fillRect(x + 19, y + 7, 2, 2);
+    px(x - 4, y + 4, 4, 11, "#e0b674");
     ctx.restore();
   }
 
   /* ============================================================
-     RENDERIZADO DE SALAS ORIGINAL
+     SALAS CON DETALLE TIPO ILUSTRACIÓN
      ============================================================ */
 
-  function renderRoom(stgoHour, stgoMinute) {
-    // Pared suave y piso de madera original cálido
-    drawPixelRect(0, 0, 640, 270, "#f4eee1");
-    drawPixelRect(0, 270, 640, 130, "#cfb288");
-    for (let i = 0; i < 640; i += 32) {
-      drawPixelRect(i, 270, 2, 130, "#b8976b");
+  function renderEnvironment(h, m) {
+    // Pared con textura cálida
+    px(0, 0, 560, 235, "#f7f1e5");
+    px(0, 230, 560, 6, "#e8dcc8"); // zócalo
+    // Piso de madera parquet acogedor
+    px(0, 236, 560, 114, "#cbb18a");
+    for (let x = 0; x < 560; x += 28) {
+      px(x, 236, 2, 114, "#b99c71");
     }
 
-    switch (currentRoom) {
-      case 'salon':
-        renderSalon(stgoHour, stgoMinute);
-        break;
-      case 'cocina':
-        renderCocina(stgoHour, stgoMinute);
-        break;
-      case 'dormitorio':
-        renderDormitorio(stgoHour, stgoMinute);
-        break;
-      case 'terraza':
-        renderTerraza(stgoHour, stgoMinute);
-        break;
-      case 'sala_nacho':
-        renderSalaNacho(stgoHour, stgoMinute);
-        break;
-      case 'sala_coni':
-        renderSalaConi(stgoHour, stgoMinute);
-        break;
+    switch(activeRoom) {
+      case 'salon': renderSalon(h, m); break;
+      case 'cocina': renderCocina(h, m); break;
+      case 'dormitorio': renderDormitorio(h, m); break;
+      case 'terraza': renderTerraza(h, m); break;
+      case 'sala_nacho': renderSalaNacho(h, m); break;
+      case 'sala_coni': renderSalaConi(h, m); break;
     }
   }
 
-  function renderSalon(hour, minute) {
-    drawPixelRect(380, 40, 140, 110, "#81d4fa");
-    drawPixelRect(380, 40, 140, 6, "#5c4033");
-    drawPixelRect(380, 144, 140, 6, "#5c4033");
-    drawPixelRect(447, 40, 6, 110, "#5c4033");
+  // 1. SALÓN
+  function renderSalon(h, m) {
+    // Ventana soleada con cortinas
+    px(320, 30, 120, 95, "#90caf9");
+    px(320, 30, 120, 5, "#5c4033");
+    px(320, 120, 120, 5, "#5c4033");
+    px(378, 30, 5, 95, "#5c4033");
+    px(305, 25, 18, 105, "#ffe082");
+    px(437, 25, 18, 105, "#ffe082");
 
-    // Cuadro geométrico pintado por Coni
-    drawPixelRect(60, 45, 90, 70, "#5c4033");
-    drawPixelRect(65, 50, 80, 60, "#ffffff");
-    drawPixelRect(75, 60, 25, 25, "#e91e63");
-    drawPixelRect(95, 75, 30, 20, "#ffeb3b");
-    drawPixelRect(110, 55, 20, 28, "#2196f3");
-    drawPixelRect(80, 90, 45, 12, "#4caf50");
-    drawPixelRect(70, 112, 70, 10, "#e0e0e0");
-    ctx.fillStyle = "#4e342e";
-    ctx.font = "8px monospace";
-    ctx.fillText("Pintado por Coni", 72, 120);
+    // Cuadro geométrico de Coni
+    px(55, 35, 80, 60, "#5c4033");
+    px(59, 39, 72, 52, "#ffffff");
+    px(68, 48, 20, 20, "#e91e63");
+    px(85, 60, 25, 16, "#ffeb3b");
+    px(98, 44, 18, 22, "#2196f3");
+    px(72, 73, 38, 10, "#4caf50");
+    px(64, 93, 62, 9, "#e0e0e0");
+    ctx.fillStyle = "#5c4033";
+    ctx.font = "7.5px monospace";
+    ctx.fillText("Pintado por Coni", 66, 100);
 
-    // Piano vertical
-    drawPixelRect(180, 120, 100, 120, "#3e2723");
-    drawPixelRect(175, 170, 110, 24, "#271612");
-    for (let k = 0; k < 10; k++) {
-      drawPixelRect(182 + k * 10, 175, 8, 16, "#ffffff");
-      if (k % 3 !== 0) drawPixelRect(188 + k * 10, 175, 5, 9, "#000000");
+    // Piano vertical de pared
+    px(150, 100, 90, 110, "#3e2723");
+    px(146, 145, 98, 22, "#271612");
+    for (let k = 0; k < 9; k++) {
+      px(152 + k * 9, 150, 7, 14, "#ffffff");
+      if (k % 3 !== 0) px(157 + k * 9, 150, 4, 8, "#000000");
     }
 
-    // Sillón azul
-    drawPixelRect(330, 230, 170, 70, "#44648c");
-    drawPixelRect(320, 250, 20, 50, "#365172");
-    drawPixelRect(490, 250, 20, 50, "#365172");
-    drawPixelRect(340, 260, 140, 14, "#5579a6");
+    // Sillón azul protagonista
+    px(280, 195, 150, 65, "#44648c");
+    px(270, 215, 18, 45, "#365172");
+    px(422, 215, 18, 45, "#365172");
+    px(290, 225, 128, 12, "#5579a6");
 
-    drawPixelRect(540, 220, 40, 45, "#bcaaa4");
-    drawPixelRect(535, 170, 50, 50, "#388e3c");
+    // Planta Monstera
+    px(470, 195, 34, 40, "#bcaaa4");
+    px(462, 145, 48, 52, "#2e7d32");
 
-    if (hour >= 15 && hour < 18) {
-      renderBoardGameScene();
+    if (h >= 15 && h < 18) {
+      // Juegos de mesa con amigos
+      px(210, 220, 180, 50, "#8d6e63");
+      px(250, 225, 100, 35, "#fff8e1");
+      px(255, 230, 26, 25, "#4caf50");
+      px(287, 230, 26, 25, "#ff9800");
+      px(319, 230, 26, 25, "#2196f3");
+
+      const anim = Math.sin(Date.now() / 280) * 4;
+      px(270 + anim, 238, 5, 5, "#e91e63");
+      px(300, 240 + anim, 5, 5, "#9c27b0");
+
+      drawConi(210, 175, false, true);
+      drawNacho(370, 175, false, true);
+
+      // Amigos
+      px(150, 180, 16, 13, "#ffccaa"); px(148, 172, 20, 9, "#d7ccc8"); px(148, 193, 20, 25, "#43a047");
+      px(290, 165, 16, 13, "#ffd1b3"); px(286, 159, 24, 15, "#d84315"); px(288, 178, 20, 25, "#f06292");
+      px(430, 180, 16, 13, "#d7ccc8"); px(428, 172, 20, 11, "#212121"); px(428, 193, 20, 25, "#fb8c00");
+
+      if (Math.floor(Date.now() / 2500) % 2 === 0) {
+        px(275, 125, 105, 22, "#ffffff");
+        px(300, 147, 8, 7, "#ffffff");
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 9px monospace";
+        ctx.fillText("¡Es tu turno...!", 283, 140);
+      }
+      drawMochi(190, 275, true);
       return;
     }
 
-    if (hour >= 11 && hour < 14) {
-      drawConi(370, 210, true, true);
-      drawNacho(230, 200, true, false);
+    if (h >= 11 && h < 14) {
+      // Nacho toca la viola y Coni lee
+      drawConi(315, 180, true, true);
+      drawNacho(200, 170, true, false);
 
-      drawPixelRect(275, 220, 30, 40, "#263238");
-      drawPixelRect(288, 250, 4, 50, "#263238");
-      drawPixelRect(278, 222, 24, 20, "#fffde7");
+      px(238, 185, 26, 35, "#263238");
+      px(249, 212, 4, 45, "#263238");
+      px(241, 187, 20, 18, "#fffde7");
 
-      const t = Date.now() / 400;
+      const t = Date.now() / 380;
       ctx.fillStyle = "#8e24aa";
-      ctx.font = "16px monospace";
-      ctx.fillText("♪", 245 + Math.sin(t) * 8, 180 - (t % 20));
-      ctx.fillText("♫", 260 + Math.cos(t) * 8, 160 - (t % 25));
+      ctx.font = "14px monospace";
+      ctx.fillText("♪", 212 + Math.sin(t) * 6, 155 - (t % 18));
+      ctx.fillText("♫", 226 + Math.cos(t) * 6, 138 - (t % 22));
 
-      drawMochi(450, 270, false);
+      drawMochi(385, 240, false);
       return;
     }
 
-    drawConi(370, 210, false, true);
-    drawNacho(430, 210, false, true);
-    drawMochi(300, 280, false);
+    // Tarde o descanso normal
+    drawConi(315, 180, false, true);
+    drawNacho(365, 180, false, true);
+    drawMochi(260, 250, false);
   }
 
-  function renderBoardGameScene() {
-    drawPixelRect(240, 250, 210, 60, "#8d6e63");
-    drawPixelRect(255, 305, 12, 35, "#5d4037");
-    drawPixelRect(420, 305, 12, 35, "#5d4037");
+  // 2. COCINA
+  function renderCocina(h, m) {
+    // Refrigerador
+    px(40, 70, 65, 165, "#cfd8dc");
+    px(44, 75, 57, 72, "#b0bec5");
+    px(44, 152, 57, 78, "#b0bec5");
+    px(90, 105, 5, 18, "#78909c");
+    px(90, 170, 5, 18, "#78909c");
 
-    drawPixelRect(290, 255, 110, 40, "#fff8e1");
-    drawPixelRect(295, 260, 30, 30, "#4caf50");
-    drawPixelRect(330, 260, 30, 30, "#ff9800");
-    drawPixelRect(365, 260, 30, 30, "#2196f3");
+    // Despensa y verduras
+    px(120, 65, 85, 85, "#a1887f");
+    px(124, 70, 77, 5, "#5d4037");
+    px(124, 105, 77, 5, "#5d4037");
+    px(132, 90, 10, 10, "#e53935");
+    px(146, 90, 10, 10, "#e53935");
+    px(162, 88, 14, 12, "#43a047");
+    px(180, 91, 12, 9, "#fb8c00");
 
-    const anim = Math.sin(Date.now() / 300) * 4;
-    drawPixelRect(310 + anim, 270, 6, 6, "#e91e63");
-    drawPixelRect(345, 272 + anim, 6, 6, "#9c27b0");
-    drawPixelRect(380 - anim, 268, 6, 6, "#00bcd4");
-
-    drawConi(240, 200, false, true);
-    drawNacho(420, 200, false, true);
-
-    drawPixelRect(170, 210, 18, 14, "#ffccaa");
-    drawPixelRect(168, 202, 22, 10, "#d7ccc8");
-    drawPixelRect(168, 224, 22, 28, "#43a047");
-
-    drawPixelRect(330, 190, 18, 14, "#ffd1b3");
-    drawPixelRect(326, 184, 26, 16, "#d84315");
-    drawPixelRect(328, 204, 22, 28, "#f06292");
-
-    drawPixelRect(485, 210, 18, 14, "#d7ccc8");
-    drawPixelRect(483, 202, 22, 12, "#212121");
-    drawPixelRect(483, 224, 22, 28, "#fb8c00");
-
-    if (Math.floor(Date.now() / 2500) % 2 === 0) {
-      drawPixelRect(310, 145, 120, 26, "#ffffff");
-      drawPixelRect(340, 171, 10, 8, "#ffffff");
-      ctx.fillStyle = "#333";
-      ctx.font = "bold 10px monospace";
-      ctx.fillText("¡Es tu turno...!", 320, 162);
-    }
-
-    drawMochi(220, 310, true);
-  }
-
-  function renderCocina(hour, minute) {
-    drawPixelRect(40, 80, 75, 190, "#cfd8dc");
-    drawPixelRect(44, 85, 67, 85, "#b0bec5");
-    drawPixelRect(44, 175, 67, 90, "#b0bec5");
-    drawPixelRect(98, 120, 6, 20, "#78909c");
-    drawPixelRect(98, 190, 6, 20, "#78909c");
-
-    drawPixelRect(130, 70, 100, 100, "#a1887f");
-    drawPixelRect(135, 75, 90, 6, "#5d4037");
-    drawPixelRect(135, 115, 90, 6, "#5d4037");
-    drawPixelRect(145, 95, 12, 12, "#e53935");
-    drawPixelRect(160, 95, 12, 12, "#e53935");
-    drawPixelRect(180, 93, 16, 14, "#43a047");
-    drawPixelRect(200, 96, 14, 10, "#fb8c00");
-
-    drawPixelRect(250, 85, 50, 40, "#fff8e1");
-    drawPixelRect(247, 83, 56, 5, "#6d4c41");
+    // Libro MENÚ
+    px(220, 75, 45, 35, "#fff8e1");
+    px(218, 73, 49, 4, "#6d4c41");
     ctx.fillStyle = "#b71c1c";
-    ctx.font = "bold 11px monospace";
-    ctx.fillText("MENÚ", 258, 108);
+    ctx.font = "bold 9.5px monospace";
+    ctx.fillText("MENÚ", 228, 95);
 
-    drawPixelRect(330, 80, 150, 6, "#5d4037");
-    drawPixelRect(340, 92, 22, 22, "#37474f");
-    drawPixelRect(348, 86, 6, 8, "#37474f");
-    drawPixelRect(375, 94, 26, 18, "#78909c");
-    drawPixelRect(382, 90, 12, 4, "#546e7a");
-    drawPixelRect(415, 86, 4, 28, "#8d6e63");
-    drawPixelRect(413, 110, 8, 8, "#8d6e63");
-    drawPixelRect(435, 86, 4, 30, "#8d6e63");
-    drawPixelRect(432, 112, 10, 8, "#8d6e63");
+    // Ollas, espátula y sartenes en pared
+    px(290, 75, 130, 5, "#5d4037");
+    px(300, 85, 18, 18, "#37474f"); px(306, 80, 5, 6, "#37474f");
+    px(330, 86, 22, 16, "#78909c"); px(336, 82, 10, 4, "#546e7a");
+    px(365, 80, 3, 24, "#8d6e63"); px(363, 100, 7, 7, "#8d6e63");
+    px(385, 80, 3, 26, "#8d6e63"); px(382, 102, 9, 7, "#8d6e63");
 
-    drawPixelRect(330, 190, 140, 80, "#eceff1");
-    drawPixelRect(350, 184, 36, 6, "#37474f");
-    drawPixelRect(400, 184, 36, 6, "#37474f");
+    // Encimera
+    px(290, 170, 120, 65, "#eceff1");
+    px(310, 165, 30, 5, "#37474f");
+    px(355, 165, 30, 5, "#37474f");
 
-    drawPixelRect(220, 240, 200, 60, "#d7ccc8");
-    drawPixelRect(240, 298, 12, 45, "#8d6e63");
-    drawPixelRect(390, 298, 12, 45, "#8d6e63");
+    // Mesa de cocina
+    px(190, 210, 180, 52, "#d7ccc8");
+    px(205, 258, 10, 40, "#8d6e63");
+    px(345, 258, 10, 40, "#8d6e63");
 
-    drawPixelRect(260, 246, 32, 8, "#ffffff");
-    drawPixelRect(348, 246, 32, 8, "#ffffff");
+    px(225, 216, 28, 7, "#ffffff");
+    px(305, 216, 28, 7, "#ffffff");
 
-    if ((hour >= 14 && hour < 15) || state.currentDish) {
-      drawPixelRect(266, 242, 20, 6, "#ff9800");
-      drawPixelRect(354, 242, 20, 6, "#ff9800");
+    if ((h >= 14 && h < 15) || gameData.cooked) {
+      px(230, 212, 18, 5, "#ff9800");
+      px(310, 212, 18, 5, "#ff9800");
+      const v = (Date.now() / 250) % 12;
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      ctx.fillRect(238, 206 - v, 3, 3);
+      ctx.fillRect(318, 206 - v, 3, 3);
 
-      const v = (Date.now() / 250) % 15;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-      ctx.fillRect(274, 235 - v, 4, 4);
-      ctx.fillRect(362, 235 - v, 4, 4);
-
-      drawConi(230, 200, false, true);
-      drawNacho(375, 200, false, true);
-
-      drawPixelRect(460, 310, 20, 8, "#ffab91");
-      drawMochi(485, 300, false);
+      drawConi(200, 175, false, true);
+      drawNacho(330, 175, false, true);
+      drawMochi(420, 265, false);
     } else {
-      drawConi(340, 160, false, false);
-      drawNacho(250, 200, false, true);
-      drawMochi(470, 305, false);
+      drawConi(300, 140, false, false);
+      drawNacho(220, 175, false, true);
+      drawMochi(410, 270, false);
     }
   }
 
-  function renderDormitorio(hour, minute) {
-    const isSleepingTime = (hour >= 22 || hour < 7);
+  // 3. DORMITORIO
+  function renderDormitorio(h, m) {
+    const isNight = (h >= 22 || h < 7);
 
-    drawPixelRect(140, 220, 45, 55, "#8d6e63");
-    drawPixelRect(152, 195, 20, 25, isSleepingTime ? "#555" : "#ffe082");
+    // Velador izquierdo
+    px(110, 195, 40, 48, "#8d6e63");
+    px(120, 172, 18, 23, isNight ? "#666" : "#ffe082");
 
-    drawPixelRect(200, 200, 240, 100, "#5d4037");
-    drawPixelRect(205, 225, 230, 75, "#c8b6db");
-    drawPixelRect(220, 210, 45, 25, "#f3e5f5");
-    drawPixelRect(365, 210, 45, 25, "#f3e5f5");
+    // Cama con cubrecama lavanda
+    px(160, 175, 215, 88, "#5d4037");
+    px(165, 198, 205, 65, "var(--accent-purple)");
+    px(178, 184, 40, 22, "#f3e5f5");
+    px(310, 184, 40, 22, "#f3e5f5");
 
-    drawPixelRect(455, 220, 45, 55, "#8d6e63");
-    drawPixelRect(467, 195, 20, 25, isSleepingTime ? "#555" : "#ffe082");
+    // Velador derecho
+    px(390, 195, 40, 48, "#8d6e63");
+    px(400, 172, 18, 23, isNight ? "#666" : "#ffe082");
 
-    drawPixelRect(540, 140, 30, 25, isSleepingTime ? "#444" : "#ffe082");
-    drawPixelRect(552, 165, 6, 120, "#3e2723");
-    drawPixelRect(542, 280, 26, 8, "#3e2723");
+    // Lámpara de pie
+    px(470, 125, 26, 22, isNight ? "#555" : "#ffe082");
+    px(481, 147, 5, 105, "#3e2723");
+    px(472, 248, 23, 7, "#3e2723");
 
-    drawPixelRect(270, 50, 100, 90, isSleepingTime ? "#0d1b2a" : "#90caf9");
-    drawPixelRect(255, 45, 20, 100, "#d1c4e9");
-    drawPixelRect(365, 45, 20, 100, "#d1c4e9");
+    // Ventana
+    px(225, 45, 90, 78, isNight ? "#0d1b2a" : "#90caf9");
+    px(212, 40, 17, 88, "#d1c4e9");
+    px(311, 40, 17, 88, "#d1c4e9");
 
-    if (isSleepingTime || (hour >= 7 && hour < 11)) {
-      drawConi(240, 225, false, false, true);
-      drawNacho(330, 225, false, false, true);
-      drawMochi(300, 240, true);
+    if (isNight || (h >= 7 && h < 11)) {
+      // Acurrucados en la cama
+      drawConi(195, 200, false, false, true);
+      drawNacho(275, 200, false, false, true);
+      drawMochi(250, 210, true);
 
-      if (isSleepingTime) {
-        ctx.fillStyle = "rgba(10, 15, 35, 0.28)";
-        ctx.fillRect(0, 0, 640, 400);
+      if (isNight) {
+        // Tinte nocturno sutil y elegante
+        ctx.fillStyle = "rgba(10, 15, 35, 0.25)";
+        ctx.fillRect(0, 0, 560, 350);
 
-        const zt = (Date.now() / 400) % 30;
+        const zt = (Date.now() / 420) % 25;
         ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 14px monospace";
-        ctx.fillText("z", 350, 210 - zt);
-        ctx.fillText("Z", 360, 200 - zt);
+        ctx.font = "bold 13px monospace";
+        ctx.fillText("z", 305, 185 - zt);
+        ctx.fillText("Z", 314, 176 - zt);
       }
     } else {
-      drawConi(230, 190, false, true);
-      drawNacho(480, 190, false, false);
-      drawMochi(290, 240, true);
+      drawConi(190, 165, false, true);
+      drawNacho(420, 165, false, false);
+      drawMochi(250, 210, true);
     }
   }
 
-  function renderTerraza(hour, minute) {
-    drawPixelRect(0, 0, 640, 240, "#b3e5fc");
-    drawPixelRect(0, 240, 640, 160, "#7cb342");
-    drawPixelRect(0, 240, 640, 8, "#558b2f");
+  // 4. TERRAZA / JARDÍN
+  function renderTerraza(h, m) {
+    // Cielo
+    px(0, 0, 560, 210, "#b3e5fc");
+    // Jardín y pasto verde
+    px(0, 210, 560, 140, "#7cb342");
+    px(0, 210, 560, 6, "#558b2f");
 
-    for (let x = 0; x < 640; x += 30) {
-      drawPixelRect(x, 210, 10, 35, "#ffffff");
-      drawPixelRect(x, 220, 30, 6, "#ffffff");
+    // Valla blanca
+    for (let x = 0; x < 560; x += 26) {
+      px(x, 185, 9, 30, "#ffffff");
+      px(x, 194, 26, 5, "#ffffff");
     }
 
-    drawPixelRect(20, 120, 80, 90, "#33691e");
-    drawPixelRect(40, 100, 60, 50, "#558b2f");
-    drawPixelRect(530, 110, 90, 100, "#33691e");
+    // Arbustos
+    px(15, 105, 70, 80, "#33691e");
+    px(30, 90, 55, 45, "#558b2f");
+    px(460, 95, 80, 90, "#33691e");
 
-    drawPixelRect(80, 300, 6, 6, "#e91e63");
-    drawPixelRect(150, 340, 6, 6, "#ffeb3b");
-    drawPixelRect(460, 320, 6, 6, "#ab47bc");
-    drawPixelRect(510, 290, 6, 6, "#ff7043");
+    // Flores
+    px(70, 265, 5, 5, "#e91e63");
+    px(130, 300, 5, 5, "#ffeb3b");
+    px(400, 280, 5, 5, "#ab47bc");
+    px(450, 255, 5, 5, "#ff7043");
 
-    drawPixelRect(100, 230, 90, 35, "#b0bec5");
-    drawPixelRect(110, 220, 70, 15, "#90a4ae");
-    drawPixelRect(138, 175, 14, 50, "#78909c");
-    drawPixelRect(125, 170, 40, 10, "#90a4ae");
-    drawPixelRect(115, 224, 60, 8, "#29b6f6");
-
+    // Fuente de agua de piedra
+    px(85, 200, 78, 30, "#b0bec5");
+    px(94, 192, 60, 13, "#90a4ae");
+    px(118, 150, 12, 45, "#78909c");
+    px(106, 146, 36, 9, "#90a4ae");
+    px(98, 195, 52, 7, "#29b6f6");
     const fw = Math.sin(Date.now() / 200) * 3;
-    drawPixelRect(143 + fw, 150, 4, 25, "#81d4fa");
+    px(122 + fw, 130, 4, 20, "#81d4fa");
 
-    drawPixelRect(300, 220, 150, 15, "#6d4c41");
-    drawPixelRect(300, 235, 150, 20, "#8d6e63");
-    drawPixelRect(310, 255, 12, 35, "#4e342e");
-    drawPixelRect(428, 255, 12, 35, "#4e342e");
+    // Banca de madera
+    px(260, 192, 130, 13, "#6d4c41");
+    px(260, 205, 130, 18, "#8d6e63");
+    px(268, 223, 10, 30, "#4e342e");
+    px(372, 223, 10, 30, "#4e342e");
 
-    if (hour >= 11 && hour < 14) {
-      drawConi(320, 180, true, true);
-      drawPixelRect(345, 220, 65, 16, "#78909c");
-      drawPixelRect(410, 222, 35, 14, "#37474f");
-      drawPixelRect(335, 214, 18, 14, "#4e342e");
-      drawPixelRect(338, 218, 12, 10, "#ffccaa");
+    if (h >= 11 && h < 14) {
+      // Coni le lee a Nacho con su cabeza en sus muslos
+      drawConi(275, 155, true, true);
+      px(298, 192, 58, 14, "#78909c");
+      px(354, 194, 30, 12, "#37474f");
+      px(288, 186, 16, 12, "#4e342e");
+      px(291, 189, 10, 9, "#ffccaa");
       ctx.fillStyle = "#333";
-      ctx.fillRect(342, 222, 3, 1);
+      ctx.fillRect(294, 193, 3, 1);
 
-      drawPixelRect(300, 125, 125, 34, "#ffffff");
-      drawPixelRect(325, 159, 10, 8, "#ffffff");
+      px(260, 105, 110, 30, "#ffffff");
+      px(280, 135, 9, 7, "#ffffff");
       ctx.fillStyle = "#3e2723";
-      ctx.font = "bold 9px monospace";
-      ctx.fillText("«...y en esa tarde,", 306, 138);
-      ctx.fillText("hallaron su hogar.» 📖", 306, 150);
+      ctx.font = "bold 8px monospace";
+      ctx.fillText("«...y en esa tarde,", 266, 117);
+      ctx.fillText("hallaron su hogar.» 📖", 266, 127);
 
-      drawMochi(260, 255, false);
+      drawMochi(225, 225, false);
       return;
     }
 
-    drawConi(330, 180, false, true);
-    drawNacho(390, 180, false, true);
-    drawMochi(270, 260, false);
+    drawConi(285, 155, false, true);
+    drawNacho(340, 155, false, true);
+    drawMochi(235, 230, false);
   }
 
-  function renderSalaNacho(hour, minute) {
-    drawPixelRect(0, 0, 640, 270, "#263238");
-    drawPixelRect(0, 270, 640, 130, "#37474f");
+  // 5. SALA DE NACHO
+  function renderSalaNacho(h, m) {
+    px(0, 0, 560, 235, "#263238");
+    px(0, 235, 560, 115, "#37474f");
 
-    drawPixelRect(70, 35, 110, 120, "#cfd8dc");
-    drawPixelRect(75, 40, 100, 110, "#90caf9");
-    drawPixelRect(120, 55, 10, 45, "#455a64");
-    drawPixelRect(102, 65, 46, 7, "#455a64");
-    drawPixelRect(122, 48, 6, 8, "#455a64");
-    drawPixelRect(95, 110, 26, 35, "#311b92");
-    drawPixelRect(125, 105, 26, 40, "#1a237e");
-    drawPixelRect(110, 95, 8, 8, "#f48fb1");
+    // Póster Cristo Redentor de Río de Janeiro con Coni y Nacho
+    px(60, 30, 95, 105, "#cfd8dc");
+    px(64, 34, 87, 97, "#90caf9");
+    px(104, 46, 8, 40, "#455a64"); // cuerpo estatua
+    px(88, 55, 40, 6, "#455a64");  // brazos
+    px(105, 40, 6, 7, "#455a64");  // cabeza
+    px(82, 95, 22, 30, "#311b92"); // Coni
+    px(108, 91, 22, 35, "#1a237e"); // Nacho
+    px(95, 82, 7, 7, "#f48fb1");
 
-    drawPixelRect(210, 50, 130, 10, "#8d6e63");
-    drawPixelRect(210, 100, 130, 10, "#8d6e63");
-    drawPixelRect(225, 30, 14, 20, "#212121");
-    drawPixelRect(228, 34, 8, 14, "#ffffff");
-    drawPixelRect(230, 38, 4, 3, "#ff9800");
-    drawPixelRect(255, 30, 16, 18, "#ffcc80");
-    drawPixelRect(256, 26, 4, 4, "#ffb74d");
-    drawPixelRect(266, 26, 4, 4, "#ffb74d");
-    drawPixelRect(290, 80, 16, 20, "#37474f");
-    drawPixelRect(293, 84, 10, 14, "#ffffff");
-    drawPixelRect(296, 88, 4, 3, "#ffa726");
-    drawPixelRect(315, 80, 16, 18, "#ffffff");
+    // Estante con peluches (pingüinos y gatitos)
+    px(180, 45, 115, 9, "#8d6e63");
+    px(180, 90, 115, 9, "#8d6e63");
+    // Peluche Pingüino
+    px(195, 26, 12, 18, "#212121"); px(197, 30, 7, 12, "#ffffff"); px(199, 34, 4, 3, "#ff9800");
+    // Peluche Gatito
+    px(220, 27, 14, 16, "#ffcc80"); px(221, 23, 4, 4, "#ffb74d"); px(229, 23, 4, 4, "#ffb74d");
+    // Peluche Pingüino 2
+    px(250, 71, 14, 18, "#37474f"); px(253, 75, 9, 12, "#ffffff"); px(255, 79, 4, 3, "#ffa726");
+    // Peluche Gatito blanco
+    px(272, 72, 14, 16, "#ffffff");
 
-    drawPixelRect(370, 160, 220, 110, "#212121");
-    drawPixelRect(410, 110, 95, 60, "#000000");
-    drawPixelRect(415, 115, 85, 50, "#0d47a1");
-    const gameTick = Math.floor(Date.now() / 200) % 4;
-    drawPixelRect(430 + gameTick * 6, 135, 12, 14, "#f44336");
-    drawPixelRect(470, 130, 14, 20, "#ffeb3b");
-    drawPixelRect(452, 170, 12, 15, "#424242");
+    // Escritorio gamer
+    px(325, 140, 195, 95, "#212121");
+    // Monitor con videojuego
+    px(360, 95, 82, 52, "#000000");
+    px(364, 99, 74, 44, "#0d47a1");
+    const tick = Math.floor(Date.now() / 200) % 4;
+    px(376 + tick * 5, 116, 10, 12, "#f44336");
+    px(410, 112, 12, 17, "#ffeb3b");
+    px(396, 147, 10, 13, "#424242");
 
-    const rgbColors = ["#00e676", "#00e5ff", "#d500f9", "#ff1744", "#ffea00"];
-    const currentColor = rgbColors[Math.floor(Date.now() / 300) % rgbColors.length];
-    drawPixelRect(530, 145, 45, 85, "#1e1e1e");
-    drawPixelRect(535, 155, 35, 65, currentColor);
+    // Torre con iluminación RGB cambiante
+    const rgb = ["#00e676", "#00e5ff", "#d500f9", "#ff1744", "#ffea00"];
+    const col = rgb[Math.floor(Date.now() / 320) % rgb.length];
+    px(465, 125, 38, 75, "#1a1a1a");
+    px(470, 134, 28, 57, col);
 
-    drawPixelRect(390, 180, 50, 80, "#d50000");
-    drawPixelRect(400, 190, 30, 60, "#212121");
+    // Silla Gamer
+    px(342, 155, 44, 70, "#d50000");
+    px(351, 164, 26, 52, "#212121");
 
-    const isPlayingHour = (hour >= 18 && hour < 22);
-    drawNacho(395, 175, false, true, false, true);
+    const isGaming = (h >= 18 && h < 22);
+    drawNacho(347, 150, false, true, false, true);
 
-    if (isPlayingHour) {
-      const gamerLines = [
-        "¡MUÉVETE PUES!",
-        "¡CASI LO MATO!",
-        "¡OOOH QUÉ BUENA!",
-        "¡TOMA ESO, JEFE!"
-      ];
-      const gIndex = Math.floor(Date.now() / 2800) % gamerLines.length;
-      drawPixelRect(360, 75, 130, 26, "#ffffff");
-      drawPixelRect(415, 101, 8, 8, "#ffffff");
+    if (isGaming) {
+      const lines = ["¡MONO CULIAO!", "¡CASI LO PASO!", "¡OOOH ME ENCANTA!"];
+      const idx = Math.floor(Date.now() / 2800) % lines.length;
+      px(315, 60, 115, 23, "#ffffff");
+      px(365, 83, 7, 7, "#ffffff");
       ctx.fillStyle = "#b71c1c";
-      ctx.font = "bold 9px monospace";
-      ctx.fillText(gamerLines[gIndex], 368, 92);
+      ctx.font = "bold 8.5px monospace";
+      ctx.fillText(lines[idx], 322, 75);
     }
 
-    drawMochi(240, 290, true);
+    drawMochi(210, 255, true);
   }
 
-  function renderSalaConi(hour, minute) {
-    drawPixelRect(0, 0, 640, 270, "#f7ede2");
-    drawPixelRect(0, 270, 640, 130, "#bc8a5f");
+  // 6. SALA DE CONI
+  function renderSalaConi(h, m) {
+    px(0, 0, 560, 235, "#f7ede2");
+    px(0, 235, 560, 115, "#bc8a5f");
 
-    drawPixelRect(40, 35, 180, 230, "#582f0e");
+    // Gran biblioteca con libros coloridos
+    px(35, 30, 155, 200, "#582f0e");
     for (let row = 0; row < 4; row++) {
-      const sy = 45 + row * 55;
-      drawPixelRect(45, sy + 45, 170, 8, "#3f1d07");
-      let bx = 50;
-      const bookColors = ["#8338ec", "#3a86ff", "#ff006e", "#fb5607", "#06d6a0", "#ffd166"];
-      let bIdx = 0;
-      while (bx < 205) {
-        const bw = 8 + (bx % 5);
-        const bh = 30 + (bx % 12);
-        drawPixelRect(bx, sy + 45 - bh, bw, bh, bookColors[bIdx % bookColors.length]);
+      const sy = 38 + row * 48;
+      px(40, sy + 40, 145, 7, "#3f1d07");
+      let bx = 44;
+      const bCols = ["#8338ec", "#3a86ff", "#ff006e", "#fb5607", "#06d6a0", "#ffd166"];
+      let i = 0;
+      while (bx < 178) {
+        const bw = 7 + (bx % 4);
+        const bh = 26 + (bx % 10);
+        px(bx, sy + 40 - bh, bw, bh, bCols[i % bCols.length]);
         bx += bw + 3;
-        bIdx++;
+        i++;
       }
     }
 
-    drawPixelRect(250, 160, 65, 45, "#7f4f24");
-    drawPixelRect(265, 168, 32, 16, "#1b1b1b");
-    drawPixelRect(278, 173, 6, 6, "#e0e0e0");
-    drawPixelRect(298, 168, 4, 15, "#ffd700");
+    // Tocadiscos vintage
+    px(218, 140, 55, 38, "#7f4f24");
+    px(230, 146, 28, 14, "#1b1b1b");
+    px(242, 150, 5, 5, "#e0e0e0");
+    px(258, 146, 3, 13, "#ffd700");
 
-    const t = Date.now() / 350;
+    const t = Date.now() / 320;
     ctx.fillStyle = "#6a1b9a";
-    ctx.font = "14px monospace";
-    ctx.fillText("♩", 270 + Math.sin(t) * 10, 140 - (t % 25));
-    ctx.fillText("♫", 285 + Math.cos(t) * 10, 125 - (t % 30));
+    ctx.font = "12px monospace";
+    ctx.fillText("♩", 232 + Math.sin(t) * 8, 124 - (t % 20));
+    ctx.fillText("♫", 246 + Math.cos(t) * 8, 110 - (t % 24));
 
-    drawPixelRect(350, 180, 230, 90, "#936639");
-    drawPixelRect(365, 270, 14, 50, "#65421d");
-    drawPixelRect(555, 270, 14, 50, "#65421d");
+    // Mesa de escribir
+    px(305, 155, 200, 80, "#936639");
+    px(318, 235, 12, 45, "#65421d");
+    px(485, 235, 12, 45, "#65421d");
 
-    drawPixelRect(375, 140, 60, 42, "#cfd8dc");
-    drawPixelRect(380, 144, 50, 32, "#37474f");
-    drawPixelRect(398, 182, 14, 8, "#90a4ae");
+    // Computador
+    px(328, 120, 52, 36, "#cfd8dc");
+    px(332, 123, 44, 28, "#37474f");
+    px(348, 156, 12, 7, "#90a4ae");
 
-    drawPixelRect(460, 165, 45, 22, "#37474f");
-    drawPixelRect(465, 155, 35, 12, "#fffdf9");
-    drawPixelRect(468, 158, 28, 2, "#555");
-    drawPixelRect(468, 162, 24, 2, "#555");
+    // Máquina de escribir vintage
+    px(400, 142, 40, 20, "#37474f");
+    px(404, 133, 32, 11, "#fffdf9");
 
-    drawPixelRect(520, 175, 12, 14, "#000000");
-    drawPixelRect(523, 171, 6, 4, "#ffb74d");
-    drawPixelRect(530, 155, 3, 22, "#fff9c4");
-    drawPixelRect(528, 150, 7, 8, "#b0bec5");
+    // Frasco de tinta y pluma
+    px(455, 151, 10, 12, "#000000");
+    px(458, 148, 5, 3, "#ffb74d");
+    px(464, 133, 3, 20, "#fff9c4");
+    px(462, 129, 6, 7, "#b0bec5");
 
-    drawConi(440, 160, false, true);
-    drawMochi(260, 290, false);
+    drawConi(385, 140, false, true);
+    drawMochi(228, 255, false);
   }
 
-  function gameLoop() {
-    const stgoNow = getSantiagoDate();
-    const hours = stgoNow.getHours();
-    const minutes = stgoNow.getMinutes();
-    const seconds = stgoNow.getSeconds();
+  function loop() {
+    const stgo = getSantiagoTime();
+    const h = stgo.getHours();
+    const m = stgo.getMinutes();
+    const s = stgo.getSeconds();
 
-    const pad = (n) => String(n).padStart(2, '0');
-    const clockEl = document.getElementById('stgo-clock');
-    if (clockEl) {
-      clockEl.innerText = `Santiago: ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-    }
+    const pad = n => String(n).padStart(2, '0');
+    const clk = document.getElementById('clock-display');
+    if (clk) clk.innerText = `Santiago: ${pad(h)}:${pad(m)}:${pad(s)}`;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    renderRoom(hours, minutes);
-    renderParticles();
-    applyDayNightLighting(hours);
-    updateDecay();
+    renderEnvironment(h, m);
+    updateParticles();
+    checkDecay();
 
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(loop);
   }
 
-  function applyDayNightLighting(hour) {
-    ctx.save();
-    if (hour >= 20 || hour < 7) {
-      ctx.fillStyle = "rgba(10, 20, 50, 0.08)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else if (hour >= 18 && hour < 20) {
-      ctx.fillStyle = "rgba(255, 110, 60, 0.06)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    ctx.restore();
-  }
-
+  // Inicialización
   (function init() {
-    const stgo = getSantiagoDate();
-    const h = stgo.getHours();
-    if (h >= 22 || h < 7) {
-      currentRoom = 'dormitorio';
-    }
-    document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
-    const initialBtn = document.getElementById('btn-' + currentRoom);
-    if (initialBtn) initialBtn.classList.add('active');
-
-    updateUIBars();
-    addDiaryEntry("together", "Hogar en Santiago", "Coni y Nacho disfrutan de un momento tranquilo en su hogar.");
-    requestAnimationFrame(gameLoop);
+    updateBars();
+    logDiary('together', 'Hogar en Santiago', 'Coni y Nacho disfrutan de un cálido y adorable momento en su hogar.');
+    requestAnimationFrame(loop);
   })();
 </script>
 </body>
