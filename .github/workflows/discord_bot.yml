@@ -1,0 +1,79 @@
+name: Enviar postal diaria a Discord
+
+on:
+  schedule:
+    # Horarios programados en hora UTC (Santiago suele ser UTC-3 en verano / UTC-4 en invierno)
+    # Ejemplo: 15:00 UTC (~12:00 mediodía en Santiago) y 23:00 UTC (~20:00 tarde/noche en Santiago)
+    - cron: '0 15 * * *'
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Permite probarlo manualmente cuando tú quieras con un clic
+
+jobs:
+  snapshot_and_send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias para la captura
+        run: |
+          npm install playwright axios form-data
+          npx playwright install --with-deps chromium
+
+      - name: Tomar captura y enviar a Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          node -e '
+          const { chromium } = require("playwright");
+          const axios = require("axios");
+          const FormData = require("form-data");
+          const fs = require("fs");
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
+            
+            // Entrar a tu página de GitHub Pages
+            await page.goto("https://coninina.github.io/hogar-coni-nacho/", { waitUntil: "networkidle" });
+            
+            // Esperar 4 segundos a que se acomoden los personajes y el diario
+            await page.waitForTimeout(4000);
+
+            // Obtener el último pensamiento del diario en vivo
+            let thought = "Coni y Nacho disfrutando de su día en casita 💕";
+            try {
+              const entryEl = await page.$("#narrative-feed div p");
+              if (entryEl) {
+                thought = await entryEl.innerText();
+              }
+            } catch(e) {}
+
+            // Tomar captura solo del marco del juego
+            const frame = await page.$("canvas#gameCanvas");
+            const screenshotPath = "postal.png";
+            if (frame) {
+              await frame.screenshot({ path: screenshotPath });
+            } else {
+              await page.screenshot({ path: screenshotPath });
+            }
+
+            await browser.close();
+
+            // Enviar a Discord mediante Webhook
+            const form = new FormData();
+            form.append("content", `🏡 **Postal del momento en Nuestro Hogar**\n> *"${thought}"*`);
+            form.append("file", fs.createReadStream(screenshotPath));
+
+            await axios.post(process.env.DISCORD_WEBHOOK, form, {
+              headers: form.getHeaders()
+            });
+
+            console.log("¡Postal enviada exitosamente a Discord!");
+          })();
+          '
