@@ -1,4 +1,4 @@
-<!-- Guardar este archivo como: index.html -->
+<!-- Guardar como: index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,9 +13,6 @@
       --lavender: #c8b6db;
       --blue-sofa: #44648c;
       --text-dark: #3a2e2b;
-      --accent-pink: #f28b82;
-      --accent-green: #81c784;
-      --accent-gold: #f4b400;
     }
 
     * {
@@ -109,9 +106,10 @@
       border: 4px solid var(--border-color);
       border-radius: 8px;
       overflow: hidden;
-      background: #000;
+      background: #f4eee1;
       box-shadow: 4px 4px 0px rgba(92, 64, 51, 0.3);
       aspect-ratio: 16 / 10;
+      min-height: 320px;
     }
 
     canvas {
@@ -138,13 +136,298 @@
       display: none;
       z-index: 10;
       text-align: center;
-      animation: popIn 0.3s ease;
-    }
-
-    @keyframes popIn {
-      0% { transform: translateX(-50%) scale(0.7); opacity: 0; }
-      100% { transform: translateX(-50%) scale(1); opacity: 1; }
     }
 
     .status-bars-container {
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .bar-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-track {
+      height: 14px;
+      background: #ddd;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 80%;
+      background: linear-gradient(90deg, #f28b82, #ff6b6b);
+      transition: width 0.3s ease;
+    }
+
+    .progress-fill.coni {
+      background: linear-gradient(90deg, #b39ddb, #9575cd);
+    }
+
+    .progress-fill.mochi {
+      background: linear-gradient(90deg, #ffb74d, #ffa726);
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .act-btn {
+      background: #fff;
+      border: 3px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .act-btn:hover { background: #fdf5e6; }
+    .act-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: #fffdf9;
+      border: 4px solid var(--border-color);
+      padding: 18px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .food-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .food-btn {
+      background: #fff;
+      border: 2px solid var(--border-color);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .food-btn:hover { background: #ffe0b2; }
+
+    .diary-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      min-width: 290px;
+      max-height: 600px;
+    }
+
+    .diary-header {
+      font-weight: bold;
+      font-size: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px dashed var(--border-color);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .diary-logs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .diary-entry {
+      background: #fff;
+      border: 2px solid #dfcfb9;
+      border-left: 5px solid #8e6e53;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .diary-entry.coni { border-left-color: #9575cd; }
+    .diary-entry.nacho { border-left-color: #e57373; }
+    .diary-entry.together { border-left-color: #4db6ac; }
+
+    .diary-time {
+      font-size: 10px;
+      color: #888;
+      margin-bottom: 3px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  <div class="game-section">
+    <div class="header-bar">
+      <div>🏡 Nuestro Hogar</div>
+      <div id="stgo-clock">Santiago: --:--:--</div>
+    </div>
+
+    <div class="room-selector">
+      <button class="room-btn active" id="btn-salon" onclick="switchRoom('salon')">🛋️ Salón</button>
+      <button class="room-btn" id="btn-cocina" onclick="switchRoom('cocina')">🍳 Cocina</button>
+      <button class="room-btn" id="btn-dormitorio" onclick="switchRoom('dormitorio')">🛏️ Dormitorio</button>
+      <button class="room-btn" id="btn-terraza" onclick="switchRoom('terraza')">🌿 Terraza / Jardín</button>
+      <button class="room-btn" id="btn-sala_nacho" onclick="switchRoom('sala_nacho')">🎮 Sala de Nacho</button>
+      <button class="room-btn" id="btn-sala_coni" onclick="switchRoom('sala_coni')">📚 Sala de Coni</button>
+    </div>
+
+    <div class="canvas-container">
+      <div id="banner-notification" class="banner-notification"></div>
+      <canvas id="gameCanvas" width="640" height="400"></canvas>
+    </div>
+
+    <div class="status-bars-container">
+      <div class="bar-box">
+        <div class="bar-label"><span>Nacho 💕</span><span id="pct-nacho">80%</span></div>
+        <div class="progress-track"><div id="bar-nacho" class="progress-fill" style="width: 80%;"></div></div>
+      </div>
+      <div class="bar-box">
+        <div class="bar-label"><span>Coni 💜</span><span id="pct-coni">80%</span></div>
+        <div class="progress-track"><div id="bar-coni" class="progress-fill coni" style="width: 80%;"></div></div>
+      </div>
+      <div class="bar-box">
+        <div class="bar-label"><span>Mochi 🐾</span><span id="pct-mochi">80%</span></div>
+        <div class="progress-track"><div id="bar-mochi" class="progress-fill mochi" style="width: 80%;"></div></div>
+      </div>
+    </div>
+
+    <div class="actions-grid">
+      <button class="act-btn" onclick="openCookMenu()">
+        <span style="font-size: 20px;">🍲</span>
+        <span>Cocinar Comida</span>
+      </button>
+      <button class="act-btn" onclick="actionHug()">
+        <span style="font-size: 20px;">🫂</span>
+        <span>Abrazo de Amor</span>
+      </button>
+      <button class="act-btn" onclick="actionPetMochi()">
+        <span style="font-size: 20px;">🐱</span>
+        <span>Acariciar Mascota</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="diary-section">
+    <div class="diary-header">
+      <span>Diario & Sentimientos</span>
+      <span style="font-size: 11px; opacity: 0.8;">En Vivo</span>
+    </div>
+    <div class="diary-logs" id="diary-logs"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cookModal" onclick="closeCookMenu(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h3 style="text-align:center;">🍳 ¿Qué preparará Coni con amor?</h3>
+    <div class="food-options">
+      <button class="food-btn" onclick="cookDish('Pastel de Choclo')">🌽 Pastel de Choclo recién horneado</button>
+      <button class="food-btn" onclick="cookDish('Panqueques')">🥞 Panqueques con manjar</button>
+      <button class="food-btn" onclick="cookDish('Crema de espárragos')">🥣 Crema de espárragos de temporada</button>
+      <button class="food-btn" onclick="cookDish('Asado de Cordero al Palo')">🍖 Asado de Cordero al Palo</button>
+    </div>
+    <button class="room-btn" style="margin-top: 6px;" onclick="closeCookMenu()">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+
+  let currentRoom = 'salon';
+  let bannerTimer = null;
+  let particles = [];
+
+  let state = {
+    nachoLove: 80,
+    coniLove: 80,
+    mochiHappy: 80,
+    lastHugTime: Date.now(),
+    lastPetTime: Date.now(),
+    currentDish: null
+  };
+
+  try {
+    const saved = localStorage.getItem('adorable_home_stgo_save');
+    if (saved) {
+      Object.assign(state, JSON.parse(saved));
+    }
+  } catch (e) {}
+
+  function saveGame() {
+    try {
+      localStorage.setItem('adorable_home_stgo_save', JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function getSantiagoDate() {
+    try {
+      const santiagoStr = new Date().toLocaleString("en-US", { timeZone: "America/Santiago" });
+      return new Date(santiagoStr);
+    } catch (e) {
+      return new Date();
+    }
+  }
+
+  function updateDecay() {
+    const now = Date.now();
+    const minSinceHug = (now - state.lastHugTime) / (1000 * 60);
+    if (minSinceHug >= 30) {
+      const steps = Math.floor(minSinceHug / 30);
+      state.nachoLove = Math.max(0, state.nachoLove - steps * 1);
+      state.coniLove = Math.max(0, state.coniLove - steps * 1);
+      state.lastHugTime += steps * 30 * 60 * 1000;
+    }
+
+    const minSincePet = (
