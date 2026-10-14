@@ -1,17 +1,15 @@
-<!-- Guardar como: index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nuestro Hogar Pixel Art - Coni & Nacho</title>
+  <title>Nuestro Hogar - Coni & Nacho</title>
   <style>
     :root {
       --bg-cream: #fbf7ee;
       --card-bg: #fffdf9;
       --border-color: #5c4033;
       --lavender: #c8b6db;
-      --blue-sofa: #44648c;
       --text-dark: #3a2e2b;
     }
 
@@ -106,7 +104,7 @@
       border: 4px solid var(--border-color);
       border-radius: 8px;
       overflow: hidden;
-      background: #f4eee1;
+      background: #fbf7ee;
       box-shadow: 4px 4px 0px rgba(92, 64, 51, 0.3);
       aspect-ratio: 16 / 10;
       min-height: 320px;
@@ -705,6 +703,11 @@
     ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
   }
 
+  /* ============================================================
+     SPRITES ORIGINALES
+     ============================================================ */
+
+  // CONI: Misma estructura inicial, pelo negro corto hasta los hombros
   function drawConi(x, y, isReading = false, isSitting = false, sleeping = false) {
     ctx.save();
     if (sleeping) {
@@ -717,6 +720,7 @@
       return;
     }
 
+    // Cabello negro corto hasta los hombros
     drawPixelRect(x - 2, y + 4, 28, 22, "#1a1a1a");
     drawPixelRect(x - 4, y + 10, 32, 18, "#151515");
 
@@ -752,10 +756,11 @@
     ctx.restore();
   }
 
+  // NACHO: Sprite original estético que te encantó
   function drawNacho(x, y, withViola = false, isSitting = false, sleeping = false, playingGame = false) {
     ctx.save();
     if (sleeping) {
-      drawPixelRect(x, y, 48, 16, "#90a4ae");
+      drawPixelRect(x, y, 48, 16, "#78909c");
       drawPixelRect(x + 40, y + 2, 14, 12, "#4e342e");
       drawPixelRect(x + 38, y + 4, 10, 8, "#ffccaa");
       ctx.fillStyle = "#333";
@@ -764,16 +769,21 @@
       return;
     }
 
-    drawPixelRect(x + 1, y + 1, 22, 12, "#4e342e");
-    drawPixelRect(x + 3, y + 12, 18, 16, "#ffccaa");
+    // Cabello original con volumen
+    drawPixelRect(x, y, 24, 12, "#4e342e");
+    drawPixelRect(x - 2, y + 4, 4, 10, "#4e342e");
+    drawPixelRect(x + 2, y + 10, 20, 16, "#ffccaa");
 
+    // Ojos originales
     ctx.fillStyle = "#2d2424";
-    ctx.fillRect(x + 7, y + 16, 3, 3);
-    ctx.fillRect(x + 15, y + 16, 3, 3);
+    ctx.fillRect(x + 6, y + 15, 3, 3);
+    ctx.fillRect(x + 15, y + 15, 3, 3);
 
+    // Sonrisa
     ctx.fillStyle = "#d7a080";
-    ctx.fillRect(x + 10, y + 22, 5, 2);
+    ctx.fillRect(x + 9, y + 21, 6, 2);
 
+    // Polera gris favorita y pantalón
     if (!isSitting) {
       drawPixelRect(x + 1, y + 26, 22, 28, "#78909c");
       drawPixelRect(x + 3, y + 54, 8, 24, "#37474f");
@@ -799,6 +809,7 @@
     ctx.restore();
   }
 
+  // MOCHI: Sprite original
   function drawMochi(x, y, sleeping = false) {
     ctx.save();
     if (sleeping) {
@@ -823,7 +834,12 @@
     ctx.restore();
   }
 
+  /* ============================================================
+     RENDERIZADO DE SALAS ORIGINAL
+     ============================================================ */
+
   function renderRoom(stgoHour, stgoMinute) {
+    // Pared suave y piso de madera original cálido
     drawPixelRect(0, 0, 640, 270, "#f4eee1");
     drawPixelRect(0, 270, 640, 130, "#cfb288");
     for (let i = 0; i < 640; i += 32) {
@@ -858,6 +874,7 @@
     drawPixelRect(380, 144, 140, 6, "#5c4033");
     drawPixelRect(447, 40, 6, 110, "#5c4033");
 
+    // Cuadro geométrico pintado por Coni
     drawPixelRect(60, 45, 90, 70, "#5c4033");
     drawPixelRect(65, 50, 80, 60, "#ffffff");
     drawPixelRect(75, 60, 25, 25, "#e91e63");
@@ -869,6 +886,7 @@
     ctx.font = "8px monospace";
     ctx.fillText("Pintado por Coni", 72, 120);
 
+    // Piano vertical
     drawPixelRect(180, 120, 100, 120, "#3e2723");
     drawPixelRect(175, 170, 110, 24, "#271612");
     for (let k = 0; k < 10; k++) {
@@ -876,6 +894,7 @@
       if (k % 3 !== 0) drawPixelRect(188 + k * 10, 175, 5, 9, "#000000");
     }
 
+    // Sillón azul
     drawPixelRect(330, 230, 170, 70, "#44648c");
     drawPixelRect(320, 250, 20, 50, "#365172");
     drawPixelRect(490, 250, 20, 50, "#365172");
@@ -1044,8 +1063,7 @@
       drawMochi(300, 240, true);
 
       if (isSleepingTime) {
-        // Tinte suave que permite ver claramente la escena
-        ctx.fillStyle = "rgba(10, 15, 35, 0.45)";
+        ctx.fillStyle = "rgba(10, 15, 35, 0.28)";
         ctx.fillRect(0, 0, 640, 400);
 
         const zt = (Date.now() / 400) % 30;
@@ -1259,20 +1277,18 @@
   function applyDayNightLighting(hour) {
     ctx.save();
     if (hour >= 20 || hour < 7) {
-      ctx.fillStyle = "rgba(10, 20, 50, 0.15)";
+      ctx.fillStyle = "rgba(10, 20, 50, 0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else if (hour >= 18 && hour < 20) {
-      ctx.fillStyle = "rgba(255, 110, 60, 0.10)";
+      ctx.fillStyle = "rgba(255, 110, 60, 0.06)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
     ctx.restore();
   }
 
-  // Inicio inmediato
   (function init() {
     const stgo = getSantiagoDate();
     const h = stgo.getHours();
-    // Si es horario nocturno, sitúa automáticamente en el dormitorio
     if (h >= 22 || h < 7) {
       currentRoom = 'dormitorio';
     }
